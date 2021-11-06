@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const apiKey = undefined;
+const apiKey = 9973533;
 
 const dranks = {};
 
@@ -18,7 +18,7 @@ dranks.getByName = (req, res, next) => {
 
 dranks.getByIngredients = (req, res, next) => {
   try {
-    fetch(`www.thecocktaildb.com/api/json/v1/${apiKey}/filter.php?i=${req.params.ingredients}`)
+    fetch(`www.thecocktaildb.com/api/json/v2/${apiKey}/filter.php?i=${req.params.ingredients}`)
       .then(data => data = res.locals.drinks)
       .then(next())
       .catch(err => next(err));
@@ -42,7 +42,7 @@ dranks.getRandom = (req, res, next) => {
 
 dranks.getPopular = (req, res, next) => {
   try {
-    fetch(`www.thecocktaildb.com/api/json/v1/${apiKey}/popular.php`)
+    fetch(`www.thecocktaildb.com/api/json/v2/${apiKey}/popular.php`)
       .then(data => data = res.locals.popular)
       .then(next())
       .catch(err => next(err));
