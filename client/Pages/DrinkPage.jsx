@@ -1,9 +1,12 @@
 import React from 'react'
+import MainContainer from '../Components/MainContainer.jsx';
 
-function DrinkPage() {
+function DrinkPage(props) {
+  const { drinkObj } = props.location.state; 
+  
   return (
     <div>
-      
+      <MainContainer left='drinkImg' drinkObj={drinkObj} right='drinkInfo' />
     </div>
   )
 }
