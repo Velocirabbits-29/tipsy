@@ -77,4 +77,4 @@ dranks.getByGlass = (req, res, next) => {
   }
 }
 
-module.exports = fileController;
+module.exports = dranks;
