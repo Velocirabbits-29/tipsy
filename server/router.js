@@ -4,6 +4,7 @@ const dranksController = require('./dranksController');
 
 const router = express.Router();
 
+// ALL API GET REQUESTS
 router.get('/placeholderforByName',
 dranksController.getByName,
   (req, res) => res.status(200).json(res.locals.drinks)
@@ -33,5 +34,6 @@ router.get('/placeholderforGlass',
 dranksController.getByGlass,
   (req, res) => res.status(200).json(res.locals.drinks)
 );
+// END API GET REQUESTS
 
 module.exports = router;
