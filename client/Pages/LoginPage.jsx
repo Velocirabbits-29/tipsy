@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
+import LoginForm from '../Components/LoginForm.jsx';
 
 function LoginPage() {
   return (
     <div>
-      
+      <LoginForm />
     </div>
   )
 }

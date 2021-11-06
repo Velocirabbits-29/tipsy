@@ -1,38 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function LoginForm() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  // login is a post request
+  const handleLogin = ((un, pw) => {
+    console.log(JSON.stringify({ username: un, password: pw }));
+
+    fetch('/login', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: un, password: pw })
+    }).then(() => {
+      console.log('logged in')
+    })
+  })
+
   return (
     <div>
       <div>
-        <form
-          onChange={(event) => console.log(event.target.value)}>
-          <h2>Username</h2>
-          <input 
+        <h2>Username</h2>
+        <form>
+          <input
             id="login-username"
             type="text"
             placeholder="login username placeholder..."
-          /> 
-          </form>
-          <form onChange={(event) => console.log(event.target.value)}>
-          <h2>Password</h2>
-          <input 
+            onChange={(event) => setUsername(event.target.value)}
+          />
+        </form>
+        <h2>Password</h2>
+        <form>
+          <input
             id="login-password"
             type="text"
             placeholder="login password placeholder..."
+            onChange={(event) => setPassword(event.target.value)}
           />
-          <button
-            type="submit">
-              Log In</button>
         </form>
       </div>
       <div>
-        {/* <p>Don't have an account?</p> <Link to={
+        <button
+          type="submit"
+          onClick={(event) => {
+            event.preventDefault();
+            return handleLogin(username, password)
+          }}>
+          Log in
+        </button>
+      </div>
+      <div>
+        <p>Don't have an account?</p>
+        <Link to={
           { pathname: '/signup' }
-        }>Sign Up</Link> */}
+        }>Sign up</Link>
       </div>
     </div>
-
   )
 }
 
