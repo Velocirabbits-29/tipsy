@@ -1,4 +1,6 @@
+
 import React, { useState } from 'react';
+
 
 function RecipeForm() {
   const [ name, setName ] = useState('');
@@ -6,20 +8,20 @@ function RecipeForm() {
   const [ instructions, setInstructions ] = useState('');
 
   // function that converts string to array
-  const makeArray = (string) => {
-    let array = string.split(',');
-    array.forEach(elem => {
-      elem = elem.trim();
-    })
-    return array;
-  }
+  // const makeArray = (string) => {
+  //   let array = string.split(',');
+  //   array.forEach(elem => {
+  //     elem = elem.trim();
+  //   })
+  //   return array;
+  // }
 
   // fetch to handle submit
   const handleSubmit = () => {
-    const ingredientList = makeArray(ingredients);
+    // const ingredientList = makeArray(ingredients);
     const body = {
       name,
-      ingredientList,
+      ingredients,
       instructions
     }
   }
@@ -41,3 +43,4 @@ function RecipeForm() {
 }
 
 export default RecipeForm;
+
