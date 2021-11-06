@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 function App() {
   return (
     <div>
-      <LoginForm />
       <Link to={{
         pathname: `/addrecipe`
       }}>Click here</Link>
