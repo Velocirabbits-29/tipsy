@@ -2,12 +2,20 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const PORT = 3000;
-const router = './router'
+const drinksRouter = require('./router');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended : true }));
 
-app.use('/', router);
+/**
+ * handle requests for static files
+ */
+ app.use(express.static(path.resolve(__dirname, '../client')));
+
+app.use('/', drinksRouter);
+
+// catch-all route handler for any requests to an unknown route
+app.use('*', (req, res) => res.status(404).send('Go home Rebecca, you\'re drunk'));
 
 if (process.env.NODE_ENV === 'production') {
   // statically serve everything in the build folder on the route '/build'
