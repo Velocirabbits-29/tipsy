@@ -140,6 +140,7 @@ dbControllers.addRecipe = (req, res, next) => {
     req.body.instructions,
     req.body.ingredientList,
   ];
+
   const queryStr = `
   INSERT into recipes r (${recipeKeys})
   VALUES ($1, $2, $3, Array $4) 
