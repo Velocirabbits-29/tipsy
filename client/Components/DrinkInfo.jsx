@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+const fetch = require('node-fetch');
 
 /*
 ***JSON DRINK OBJECT FORMAT***
@@ -9,15 +10,12 @@ obj.strMeasure[num] = corresponding measurement
 */
 
 function DrinkInfo({ drinkObj }) {
-  // const drinkName = drinkObj.strDrink;
-  // const instructions = drinkObj.strInstructions;
+  const drinkName = drinkObj.strDrink;
+  const instructions = drinkObj.strInstructions;
+  // Must combine strIngredient and strMeasure to populare ingredients array.
+  // This is handled below in the while loop
   const ingredients = [];
-
-  // fetch request to our API  using ID
-  useEffect(() => {
-    // insert fetch request
-  }, [])
-  
+    
   // create a numerical variable of the current strIngredient
   let num = 1;
 
@@ -25,8 +23,11 @@ function DrinkInfo({ drinkObj }) {
   while (drinkObj.strIngredient`${num}` !== null) {
     // create an array of ingredients and their measurements if applicable
     const ingredient = drinkObj.strIngredient`${num}`;
+    // the following line gets overwritten if there is no corresponding measurement
     let measurement = ': '
+    // check if the current ingredient has a corresponding measurement
     (drinkObj.strMeasure`${num}` !== null) ? measurement += drinkObj.strMeasure`${num}` : measurement = '';
+    // push the completed string into the ingredients array
     ingredients.push(`${ingredient}${measurement}`)
     num++;
   }
