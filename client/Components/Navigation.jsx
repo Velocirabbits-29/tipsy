@@ -21,7 +21,15 @@ const NavLink = styled(Link)`
 const CircleNavLink = styled(NavLink)`
   font-size: .75em;
 `
-
+const NavHyperlink = styled.a`
+  font-weight: 300;
+  margin: 0 150px;
+  text-decoration: none;
+  color: #6F9283;
+`
+const CircleNavHyperlink = styled(NavHyperlink)`
+  font-size: .75em;
+`
 const Logo = styled.h1`
   font-weight: 500;
   color: #6F9283;
@@ -42,7 +50,8 @@ const Circle = styled.div`
 
 function Navigation() {
   const [ loginOrOut, setLoginOrOut ] = useState('LOGIN');
-  
+  const [ greetingMessage, setGreetingMessage ] = useState('');
+
   // check if user is logged in and conditionally render login or logout
   useEffect(() => {
     console.log('does nav run')
@@ -52,6 +61,36 @@ function Navigation() {
     }
     console.log(loginOrOut)
   }, []);
+
+  // {if(loginOrOut === 'LOGOUT') {
+  //   <p>Hello</p>
+  // }}
+
+  // when user clicks log out button, delete local storage userId item
+  const logOut = () => {
+    localStorage.removeItem('userId')
+    console.log('logged out!')
+  }
+
+  // set up conditional rendering of login/logout button
+  let logButton; 
+  if (loginOrOut === 'LOGIN') {
+    logButton = 
+      <Circle>
+        <CircleNavLink to={{
+          pathname: `/login`
+        }}>{ loginOrOut }</CircleNavLink>
+      </Circle>
+  } else if (loginOrOut === 'LOGOUT') {
+    logButton = 
+    <Circle>
+      <CircleNavHyperlink 
+          href="http://localhost:8080/"
+          onClick={() => {
+            logOut();
+      }}>{ loginOrOut }</CircleNavHyperlink>
+    </Circle>
+  }
 
   return (
     <NavContainer id='navigation'>
@@ -68,11 +107,9 @@ function Navigation() {
       <NavLink to={{
         pathname: `/mydrinks`
       }}>My Drinks</NavLink>
-
+      
       <Circle>
-        <CircleNavLink to={{
-          pathname: `/login`
-        }}>{ loginOrOut }</CircleNavLink>
+        {logButton}
       </Circle>
       
     </NavContainer>

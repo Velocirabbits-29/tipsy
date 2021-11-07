@@ -9,7 +9,7 @@ function LoginForm() {
   // login is a post request
   const handleLogin = ((username, password) => {
     console.log(JSON.stringify({ username, password }));
-
+    
     // fetch is built into the browser
     fetch('/login', {
       method: 'POST',
