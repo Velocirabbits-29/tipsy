@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   // login is a post request
   const handleLogin = ((username, password) => {
@@ -14,13 +15,22 @@ function LoginForm() {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
-    }).then((data) => {
-      console.log('logged in')
-      // get userId in response
-      // need to double check format of data that is sent here
+    })
+    // .then(response => response.json())
+    .then((data) => {
+      // check response format... need conditional if user is authenticated
 
-      // set userId in local storage to persist through application
-      localStorage.setItem('userId', 'jennifer123');
+      // if user is authenticated
+        console.log('logged in')
+        // set userId in local storage to persist through application
+        localStorage.setItem('userId', 'jennifer123');
+        setMessage('Success!');
+        // redirect user to home page
+        window.location.href='http://localhost:8080/';
+      
+      // if user is not authenticated
+        // setMessage('Invalid username/password. Please try again.');
+        // console.log('Invalid username/password');
     })
   })
 
@@ -51,10 +61,13 @@ function LoginForm() {
           type="submit"
           onClick={(event) => {
             event.preventDefault();
-            return handleLogin(username, password)
+            return handleLogin(username, password);
           }}>
           Log in
         </button>
+      </div>
+      <div>
+        <p>{message}</p>
       </div>
       <div>
         <p>Don't have an account?</p>
