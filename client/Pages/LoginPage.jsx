@@ -1,10 +1,10 @@
 import React from 'react';
-import LoginForm from '../Components/LoginForm.jsx';
+import MainContainer from '../Components/MainContainer.jsx';
 
 function LoginPage() {
   return (
     <div>
-      <LoginForm />
+      <MainContainer left='image' right='login' />
     </div>
   )
 }

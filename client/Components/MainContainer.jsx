@@ -4,20 +4,46 @@ import styled from 'styled-components';
 import MyList from '../Components/MyList.jsx';
 import SearchForm from '../Components/SearchForm.jsx';
 import DrinkInfo from './DrinkInfo.jsx';
+import SignupForm from './SignupForm.jsx';
+import LoginForm from './LoginForm.jsx'
+import RecipeForm from './RecipeForm.jsx';
+import Navigation from './Navigation.jsx';
 
 function MainContainer(props) {
   const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-  `
+    justify-content: space-between;
+    height: 80vh;
+    border-bottom: 1px  #6F9283 solid;
+    border-left: 1px  #6F9283 solid;
+    border-right: 1px  #6F9283 solid;
+    margin: 0 80px;
+  `;
 
-  const { left, right, drinkObj } = props;
+  const { left, right, drinkObj, userFavs, userRecipes } = props;
 
   const Image = styled.img`
     border-radius: 300px 300px 0 0;
-    width: 40vw;
-  `
+    width: 350px;
+    height: 500px;
+  `;
+  const LeftContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    border-right: 1px  #6F9283 solid;
+    flex: 1;
+  `;
+
+  const RightContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 2;
+    color: #6F9283;
+  `;
   // Logic for switching which components will render on the left
   // Image or My Favorite Drinks
   let Left;
@@ -28,6 +54,8 @@ function MainContainer(props) {
     case 'drinkImage':
       Left = <Image src={drinkObj.strDrinkThumb} /> // do i need to use 'require'?
       break;
+    case 'favorites':
+      Left = <MyList userFavs={userFavs}/>
   }
 
   // Logic for switching which components will render on the right
@@ -39,21 +67,36 @@ function MainContainer(props) {
     case 'drink':
       Right = <DrinkInfo title='My Favorite Drinks' drinkObj={drinkObj}/>
       break;
+    case 'recipes':
+      Right = <MyList userRecipes={userRecipes} />
+      break;
+    case 'signup':
+      Right = <SignupForm />
+      break;
+    case 'login':
+      Right = <LoginForm />
+      break;
+    case 'addRecipe':
+      Right = <RecipeForm />
+      break;
   };
 
 
   return (
-    <Wrapper id='main-container'>
-      {/* Left Side */}
-      <div>
-        { Left }
-      </div>
+    <>
+      <Navigation />
+      <Wrapper id='main-container'>
+        {/* Left Side */}
+        <LeftContainer>
+          { Left }
+        </LeftContainer>
 
-      {/* Right Side */}
-      <div>
-        { Right }
-      </div>
-    </Wrapper>
+        {/* Right Side */}
+        <RightContainer>
+          { Right }
+        </RightContainer>
+      </Wrapper>
+    </>
   )
 }
 
