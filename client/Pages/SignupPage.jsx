@@ -1,11 +1,10 @@
 import React from 'react';
-import SignupForm from '../Components/SignupForm.jsx';
+import MainContainer from '../Components/MainContainer.jsx';
 
 function SignupPage() {
   return (
     <div>
-      Hello this is the signup page!!
-      <SignupForm />
+      <MainContainer left='image' right='signup' />
     </div>
   )
 }

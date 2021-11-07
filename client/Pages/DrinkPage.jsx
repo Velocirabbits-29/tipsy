@@ -6,7 +6,7 @@ function DrinkPage(props) {
   
   return (
     <div>
-      <MainContainer left='drinkImg' drinkObj={drinkObj} right='drinkInfo' />
+      <MainContainer left='drinkImage' drinkObj={drinkObj} right='drinkInfo' />
     </div>
   )
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import RecipeForm from '../Components/RecipeForm.jsx';
+import MainContainer from '../Components/MainContainer.jsx';
 
 function RecipePage() {
   return (
     <div>
-      <RecipeForm />
+      <MainContainer left='image' right='addRecipe' />
     </div>
   )
 }
