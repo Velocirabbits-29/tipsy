@@ -6,15 +6,21 @@ function LoginForm() {
   const [password, setPassword] = useState('');
 
   // login is a post request
-  const handleLogin = ((un, pw) => {
-    console.log(JSON.stringify({ username: un, password: pw }));
+  const handleLogin = ((username, password) => {
+    console.log(JSON.stringify({ username, password }));
 
+    // fetch is built into the browser
     fetch('/login', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: un, password: pw })
-    }).then(() => {
+      body: JSON.stringify({ username, password })
+    }).then((data) => {
       console.log('logged in')
+      // get userId in response
+      // need to double check format of data that is sent here
+
+      // set userId in local storage to persist through application
+      localStorage.setItem('userId', 'jennifer123');
     })
   })
 
@@ -26,7 +32,7 @@ function LoginForm() {
           <input
             id="login-username"
             type="text"
-            placeholder="login username placeholder..."
+            // placeholder="login username placeholder..."
             onChange={(event) => setUsername(event.target.value)}
           />
         </form>
@@ -35,7 +41,7 @@ function LoginForm() {
           <input
             id="login-password"
             type="text"
-            placeholder="login password placeholder..."
+            // placeholder="login password placeholder..."
             onChange={(event) => setPassword(event.target.value)}
           />
         </form>

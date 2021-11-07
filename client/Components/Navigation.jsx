@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -38,10 +38,21 @@ const Circle = styled.div`
   width: 70px;
 `
 
-// check if user is logged in and conditionally render login or logout
-const loginOrOut = 'LOGIN';
+
 
 function Navigation() {
+  const [ loginOrOut, setLoginOrOut ] = useState('LOGIN');
+  
+  // check if user is logged in and conditionally render login or logout
+  useEffect(() => {
+    console.log('does nav run')
+    const checkUserId = localStorage.getItem('userId');
+    if (checkUserId !== null) {
+      setLoginOrOut('LOGOUT') 
+    }
+    console.log(loginOrOut)
+  }, []);
+
   return (
     <NavContainer id='navigation'>
       <NavLink to={{
