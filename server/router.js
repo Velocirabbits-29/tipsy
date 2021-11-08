@@ -2,9 +2,19 @@ const express = require('express');
 
 const dranksController = require('./controllers/dranksController');
 
+const authController = require('./controllers/authController');
+
 const router = express.Router();
 
 // ALL API GET REQUESTS
+
+router.post('/signup', 
+authController.createUser,
+    (req, res) => res.status(200).json(res.locals.userId));
+
+router.post('/login',
+authController.verifyUser,
+    (req, res) => res.status(200).json(res.locals.userId)); 
 
 // router for main user submit function
 router.get('/placeholderforHandleSubmit',

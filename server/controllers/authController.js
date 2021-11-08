@@ -1,49 +1,53 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 const { Pool } = require('pg');
-const db = require ('./models/userModels.js');
+const db = require ('../models/userModels');
 const bcrypt = require ('bcryptjs');
 
 const authController = {};
 
-authController.createUser = (req, res, next) => {
-    try{
-        // user will enter the following info into fields on the front end signup page. 
-        // destructure user inputs from req.body
-        //______________
-        console.log(`entered createUser middleware`);
-        //______________
-        const { username, password, firstName, lastName, email} = req.body;
-        let hashedPassword;
-        // if this doesn't work, check out https://node-postgres.com/features/queries for another option using parameterized queries
-        const userQuery = `INSERT INTO user(first_name, last_name, email) VALUES (${firstName}, ${lastName}, ${email})`;
-        // if lastval() doesn't work, look into doing a query to find our newly created user and saving its _id to a variable
-        // lastval() notes are here https://www.postgresql.org/docs/current/functions-sequence.html
-        const userLoginInfoQuery = `INSERT INTO user_login_info(user_id username, password) VALUES (${lastval()}, ${username}, ${hashedPassword})`;
-        // hash the user inputted password using salt length 10
-        bcrypt.hash(password, 10, (err, hash) => {
-            //______________
-            console.log(`attempting to hash and salt password in createUser middleware`);
-            //______________
-            if (err) return next(err);
-            hashedPassword = hash;
-            db.query(userQuery)
-            .then(() => {
-                //______________
-                console.log(`entered userLoginInfoQuery request`);
-                //______________
-                db.query(userLoginInfoQuery);
-            })
-            .then(() => {
-                return next();
-            })
-            .catch((err) => {
-                //______________
-                console.log('caught an error in one of the database queries');
-                //______________
-                return next(err);
-            });
-        });
+authController.createUser = async(req, res, next) => {
+ 
+    try {
+        
+        const { username, password, firstName, lastName, email } = req.body;
+        // query to enter name and email into user table
+        // const userQuery = `INSERT INTO users(first_name, last_name, email) VALUES (${firstName}, ${lastName}, ${email})`;
+        // db.query(userQuery)
+        //     .then(data => console.log(data));
+        //  const ass = bcrypt.hash(password, 10, async(err, hash) => {
+        //     hashed = await hash;
+        //         // .then(db.query(`INSERT INTO user_login(user_id username, password) VALUES (${res.locals.userId}, '${username}', ${hash})`))
+        //         // .catch((err) => {
+        //         //     //______________
+        //         //     console.log('caught an error in one of the database queries');
+        //         //     //______________
+        //         //     return next(err);
+        //         // });
+        // });
+        const hash = await bcrypt.hashSync(password, 10);
+
+        console.log(username, password, firstName, lastName, email)
+        //const userQuery = `INSERT INTO users(first_name, last_name, email) VALUES (${firstName}, ${lastName}, ${email}) RETURNING *`;
+        const userQuery = "SELECT * FROM users";
+        const result = await db.query(userQuery);
+            console.log(result);
+        
+                // .then(db.query(`INSERT INTO user_login(user_id username, password) VALUES (${res.locals.userId}, '${username}', ${hash})`))
+                // .catch((err) => {
+                //     //______________
+                //     console.log('caught an error in one of the database queries');
+                //     //______________
+                //     return next(err);
+                // });
+       
+        // db.query(`INSERT INTO users(first_name, last_name, email) VALUES ('${firstName}', '${lastName}', '${email}') RETURNING *`)
+        // .then(data => console.log('returning the data log', data))
+        // .then((data) => {
+        //     res.locals.userId = data;
+        //     console.log('should be userId ->', res.locals.userId)
+        // })
+        return next();
     } catch(err) {
         //______________
         console.log(`entered big "catch block" of createUser middleware`);
@@ -58,15 +62,9 @@ authController.verifyUser = (req, res, next) => {
         console.log(`entered verifyUser middleware`);
         //______________
         const {username, password} = req.body;
-        let hashedPassword;
-        const query = `SELECT user_login_info(${username}, ${hashedPassword})`;
+        console.log(`password === ${password}`)
         bcrypt.hash(password, 10, (err, hash) => {
-            //______________
-            console.log(`attempting to hash and salt password in verifyUser middleware`);
-            //______________
-            if (err) return next(err);
-            hashedPassword = hash;
-            db.query(query)
+            db.query(`SELECT username, password FROM user_login WHERE username = '${username}' AND password = '${hash}'`)
             .then(data => {
                 //______________
                 console.log(`received data from database query in verifyUser middleware`);
