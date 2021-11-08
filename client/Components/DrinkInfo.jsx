@@ -57,7 +57,7 @@ function DrinkInfo({ drinkObj }) {
     const ingredient = drinkObj[key];
     if (ingredient === null) break;
     // the following line gets overwritten if there is no corresponding measurement
-    let measurement = ': '
+    let measurement = ':     ';
     // check if the current ingredient has a corresponding measurement
     // (drinkObj.strMeasure`${num}` !== null) ? measurement += drinkObj.strMeasure`${num}` : measurement = '';
     measurement += ingredientAndMeasureKeys[key];

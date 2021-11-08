@@ -10,7 +10,7 @@ const StyledSearchForm = styled.div`
   justify-content: center;
 `
 
-function SearchForm(props) {
+function SearchForm() {
   let history = useHistory();
   const [ ingredients, setIngredients ] = useState('');
   const [ mood, setMood ] = useState('');
@@ -89,7 +89,8 @@ function SearchForm(props) {
           console.log(message);
         }
       }
-      );
+      )
+      .catch((err) => console.log(err));
         
   }
 

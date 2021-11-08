@@ -49,7 +49,7 @@ function LoginForm() {
         <form>
           <input
             id="login-password"
-            type="text"
+            type="password"
             // placeholder="login password placeholder..."
             onChange={(event) => setPassword(event.target.value)}
           />
