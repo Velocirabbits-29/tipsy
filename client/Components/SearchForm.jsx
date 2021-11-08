@@ -49,11 +49,8 @@ function SearchForm(props) {
   // using the above moodList object. Set the result as our
   // "mood" state.
   const assignMood = (e) => {
-<<<<<<< HEAD
     console.log('assignMood invoked');
     console.log(e.target.value);
-=======
->>>>>>> 3c7991944ad3fb20b32197bca53a0ba7f602c7fb
     setMood(moodList[e.target.value]);
   }
 
