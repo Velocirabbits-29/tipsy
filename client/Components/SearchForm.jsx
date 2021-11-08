@@ -11,14 +11,14 @@ function SearchForm() {
   const [ ingredients, setIngredients ] = useState();
   const [ mood, setMood ] = useState('');
 
-  const moodList= [
-    'Be basic',
-    'Feel fancy',
-    'Party',
-    'Be experimental',
-    'Find something casual',
-    'I don\'t know surprise me',
-  ];
+  const moodList= {
+    'Be basic': 'categoryhere',
+    'Feel fancy': 'categoryhere',
+    'Party': 'categoryhere',
+    'Be experimental': 'categoryhere',
+    'Find something casual': 'categoryhere',
+    'I don\'t know surprise me': 'categoryhere',
+  };
 
   // const makeArray = (string) => {
   //   let array = string.split(',');
@@ -28,18 +28,18 @@ function SearchForm() {
   //   return array;
   // }
 
+  // change to Object.keys(moodList).map()...
   const moods = moodList.map((elem, index) => {
-    return <option value={elem} key={index.toString()}>{ elem }</option>
+    return <option value={elem} key={index.toString()} >{ elem }</option>
   }); 
 
   const handleSubmit = () => {
-    // const ingredientList = makeArray(ingredients);
-    const body = {
-      ingredients
-    }
+    // make sure to take out all the spaces from 'ingredients'
+
     // after fetch request, returns an array holding recipe objs
     // loop through the array, finding the first obj that matches the mood
     // <Link> to Drink Page, passing in that obj ^ (drinkObj)
+    fetch(`url.com/dfdlsfksd/i=${}`, );
   }
 
   return (
@@ -48,10 +48,10 @@ function SearchForm() {
         <h1>So what are we working with?</h1>
         <input type='text' value={ingredients} 
           onChange={e => setIngredients(e.target.value)} 
-          placeholder='Ingredients...'  
+          placeholder='Separate each ingredient with a comma...'  
         />
         <h1>I want to...</h1>
-        <select id="moodList">
+        <select id="moodList" onChange={} value={mood}>
           { moods }
         </select>
         <input type='submit' value='Submit' onSubmit={handleSubmit} />
