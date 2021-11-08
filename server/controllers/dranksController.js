@@ -6,33 +6,72 @@ const apiKey = 9973533;
 const dranks = {};
 
 // API GET REQUESTS
-dranks.getByName = (req, res, next) => {
-  // will reurn all drinks with the search query in the name
-  // i.e. searching 'margarita' returns all cocktails with the word margarita in them
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${req.params.name}`)
-      .then(data => data.json())
-      .then(data => {
-        res.locals.drinks = data;
-        next();
-      })
-      .catch((err) => next({
-        log: 'Express error handler caught error in getByName',
-        status: 500,
-        message: { err: `${err}` },
-      }));
-}
 
-dranks.getByIngredients = (req, res, next) => {
-  // if searching by multiple ingredients, they are seperated by a commma with no spaces or underscoring.
-  // ingredients that have multiple words seperate the words by underscore (i.e. Dry_Vermouth)
-    fetch(`htt[s://www.thecocktaildb.com/api/json/v2/${apiKey}/filter.php?i=${req.params.ingredients}`)
+dranks.handleSubmit = (req, res, next) => {
+  const ids = [];
+  const queryMet = [];
+  const catCache = {};
+  // query the API with the ingredients our user entered on the homepage.
+  fetch(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/filter.php?i=${req.params.ingredients}`)
       .then(data => data.json())
-      .then(data => {
-        res.locals.drinks = data;
-        next();
+      .then(async (data) => {
+        // the api returns an array if any drinks are found
+        // for every drink the query returns
+        for (drink in data.drinks) {
+          // grab the drink's id and push to an array
+          ids.push(data.drinks[drink].idDrink);
+        }
+        // once ids has been fully populated
+        for (let i = 0; i < ids.length; i++) {
+          // check the api entry of each drink returned by the ingredients query
+          await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${ids[i]}`)
+          .then(data => data.json())
+          .then(data => {
+            // if the current drink's category matches the category corresponding to the user's input mood
+            if (data.drinks[0].strCategory === req.params.category) {
+              // push that drink object into an array
+              queryMet.push(data.drinks[0]);
+              //  { res.locals.drink = data.drinks[0];
+              // return next(); } <-- & ^ code we might still need
+            } else {
+              // otherwise, store the category in a cache and log that category's appearance frequency
+              catCache[data/drinks[0].strCategory] ? catCache[data/drinks[0].strCategory] += 1 : catCache[data/drinks[0].strCategory] = 1;
+            }
+          })
+        }
+        // if the query returned no strict results
+        if (queryMet.length === 0) {
+          // check the cache, were any drinks found using the user's ingredients at all?
+          const catKeys = Object.keys(catCache);
+          let max = 0;
+          let response;
+          for (key in catKeys) {
+            if (catCache[key] > max) {
+              max = catCache[key];
+              response = key;
+            }
+          }
+          // if so, suggest the user switch their mood to the most frequent category appearance returned by the ingredients query.
+          if (response) {
+            res.locals.drinks = {"suggestion": `Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling ${response} then we found some recipes for you!`};
+            return next();
+          } else {
+            // if no drinks were found using their ingredients
+            // assign a null object to res.locals for the front end to interpet
+            res.locals.drinks = {"suggestion": "We're sorry, no drinks using all of those ingredients were found. Try modifying your search."};
+            // and continue the middleware chain
+            next();
+          }
+        } else {
+          // if the query DID return results, assign them to res.locals
+          res.locals.drinks = queryMet;
+          // and continue the middleware chain
+          next();
+        }
       })
+      // catch any errors that may occur and send to the universal error handler
       .catch((err) => next({
-        log: 'Express error handler caught error in getByIngredients',
+        log: 'Express error handler caught error in handleSubmit',
         status: 500,
         message: { err: `${err}` },
       }));
@@ -63,6 +102,43 @@ dranks.getPopular = (req, res, next) => {
       })
       .catch((err) => next({
         log: 'Express error handler caught error in getPopular',
+        status: 500,
+        message: { err: `${err}` },
+      }));
+}
+
+
+
+
+// =============================CURRENTLY UNUSED MIDDLEWARE=============================
+
+dranks.getByIngredients = (req, res, next) => {
+  // if searching by multiple ingredients, they are seperated by a commma with no spaces or underscoring.
+  // ingredients that have multiple words seperate the words by underscore (i.e. Dry_Vermouth)
+    fetch(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/filter.php?i=${req.params.ingredients}`)
+      .then(data => data.json())
+      .then(data => {
+        res.locals.drinks = data;
+        next();
+      })
+      .catch((err) => next({
+        log: 'Express error handler caught error in getByIngredients',
+        status: 500,
+        message: { err: `${err}` },
+      }));
+}
+
+dranks.getByName = (req, res, next) => {
+  // will reurn all drinks with the search query in the name
+  // i.e. searching 'margarita' returns all cocktails with the word margarita in them
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${req.params.name}`)
+      .then(data => data.json())
+      .then(data => {
+        res.locals.drinks = data;
+        next();
+      })
+      .catch((err) => next({
+        log: 'Express error handler caught error in getByName',
         status: 500,
         message: { err: `${err}` },
       }));
