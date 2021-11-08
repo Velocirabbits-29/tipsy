@@ -56,8 +56,8 @@ function SearchForm() {
     // query the API via the handleSubmit router, passing in the necessary req.querys
     fetch(`http://localhost:3000/handleSubmit?ingredients=${sendIngredients}&category=${mood}`, (req, res) => {
       console.log('Fetching from API');
-      const drinkObj  
-      const message
+      let drinkObj;
+      let message;
       // if message, an object will be returned
       if (res.data.drinks.suggestion) message = res.data.drinks.suggestion;
       // otherwise we're recieving an array of objects and want to specify the index we're grabbing
