@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import  { Redirect } from 'react-router-dom'
-
+import  { Redirect, useHistory } from 'react-router-dom';
+// import ReactDOM from 'react-dom';
+// ReactDom.render()
 
 const StyledSearchForm = styled.div`
   display: flex;
@@ -9,8 +10,9 @@ const StyledSearchForm = styled.div`
   justify-content: center;
 `
 
-function SearchForm() {
-  const [ ingredients, setIngredients ] = useState();
+function SearchForm(props) {
+  let history = useHistory();
+  const [ ingredients, setIngredients ] = useState('');
   const [ mood, setMood ] = useState('');
 
   // object translating user's input mood to API's predetermined list of categories
@@ -42,7 +44,7 @@ function SearchForm() {
   // user has input a mood. Turn that into an API accepted category
   // using the above moodList object. Set the result as our
   // "mood" state.
-  const assignMood = () => {
+  const assignMood = (e) => {
     console.log('assignMood invoked');
     setMood(moodList[e.target.value]);
   }
@@ -52,25 +54,37 @@ function SearchForm() {
     // remove all spaces from the user's ingredients input
     const sendIngredients = ingredients.replace(' ', '');
     console.log('finalized ingredients query string', sendIngredients);
+    console.log('mood: ', mood)
+    let drinkObj;
+    let message;
 
     // query the API via the handleSubmit router, passing in the necessary req.querys
-    fetch(`http://localhost:3000/handleSubmit?ingredients=${sendIngredients}&category=${mood}`, (req, res) => {
-      console.log('Fetching from API');
-      let drinkObj;
-      let message;
-      // if message, an object will be returned
-      if (res.data.drinks.suggestion) message = res.data.drinks.suggestion;
-      // otherwise we're recieving an array of objects and want to specify the index we're grabbing
-      else drinkObj = res.data.drinks[0];
-      console.log('API\'s response', res.data.drinks[0] || res.data.drinks.suggestion);
-    })
+    fetch(`/api/handleSubmit?ingredients=${sendIngredients}&category=${mood}`)
+      .then(res => res.json())
+      .then(data => {
+        // if (res.data.drinks.suggestion) message = res.data.drinks.suggestion;
+        drinkObj = data[0];
+        console.log('API\'s response', drinkObj || res.data.drinks.suggestion);
+      })
       // then redirect to the /drink page, passing drinkObj (or message?) as a prop.
-      .then(<Redirect
-        to={{
-          pathname: "/drink",
-          state: { drinkObj }
-        }}
-      />
+      .then(() => {
+        if (drinkObj) {
+          // ReactDOM.render(<Redirect
+          //   to={{
+          //     pathname: "/drink",
+          //     state: { drinkObj }
+          //   }}
+          //   />, document.getElementById('root')); 
+          history.push({
+            pathname: '/drink',
+            state: {
+              drinkObj
+            }
+          })
+        } else {
+          console.log(message);
+        }
+      }
       );
         
   }
@@ -88,7 +102,7 @@ function SearchForm() {
         <select id="moodList" onChange={assignMood} value={mood}>
           { moods }
         </select>
-        <input type='submit' value='Submit' onSubmit={handleSubmit} />
+        <input type='submit' value='Submit' onClick={handleSubmit} />
       </StyledSearchForm>
     </div>
   )

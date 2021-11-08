@@ -9,7 +9,7 @@ const router = express.Router();
 // router for main user submit function
 router.get('/handleSubmit',
 dranksController.handleSubmit,
-  (req, res) => res.status(200).json(res.locals.drinks)
+  (req, res) => res.status(200).send(res.locals.drinks)
 );
 
 // routers for stretch goals (popular and I'm feeling lucky)
