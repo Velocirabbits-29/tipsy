@@ -1,9 +1,61 @@
 * {
   font-family: 'Sora', sans-serif;
+  background-color: #D4DFC7;
 }
 
 body {
   margin: 0;
   padding: 0;
   display: flex;
+}
+
+input[type="text"] {
+  height: 30px;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+#moodList {
+  height: 50px;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+option {
+  height: 30px;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.mood0 {
+  color: lightgray;
+}
+
+input[type="submit"] {
+  height: 40px;
+  border: none;
+  background-color: #6F9283;
+  border-radius: 10px;
+  color: white;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+.addrecipe {
+  width: 300px;
+}
+
+.recipeinstructions {
+  width: 300px;
+  line-height: 2em !important;
+  border: none;
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
 }

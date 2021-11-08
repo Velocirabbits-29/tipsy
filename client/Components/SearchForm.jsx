@@ -17,6 +17,7 @@ function SearchForm(props) {
 
   // object translating user's input mood to API's predetermined list of categories
   const moodList= {
+    'Select a mood': 'Placeholder',
     'Be basic': "Ordinary Drink",
     'Feel fancy': "Cocktail",
     'Party': "Punch / Party Drink",
@@ -38,7 +39,10 @@ function SearchForm(props) {
 
   // render all keys in the moodList object as options for the user to select
   const moods = Object.keys(moodList).map((elem, index) => {
-    return <option value={elem} key={index.toString()} >{ elem }</option>
+    if (elem === 'Select a mood') {
+      return <option id='select' value='' key={index.toString()} >{ elem }</option>
+    }
+    return <option id={`mood${index}`} value={elem} key={index.toString()} >{ elem }</option>
   }); 
 
   // user has input a mood. Turn that into an API accepted category
@@ -46,6 +50,7 @@ function SearchForm(props) {
   // "mood" state.
   const assignMood = (e) => {
     console.log('assignMood invoked');
+    console.log(e.target.value);
     setMood(moodList[e.target.value]);
   }
 
@@ -99,7 +104,7 @@ function SearchForm(props) {
           placeholder='Separate each ingredient with a comma...'  
         />
         <h1>I want to...</h1>
-        <select id="moodList" onChange={assignMood} value={mood}>
+        <select id="moodList" onChange={assignMood} >
           { moods }
         </select>
         <input type='submit' value='Submit' onClick={handleSubmit} />

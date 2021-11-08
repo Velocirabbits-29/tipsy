@@ -51,13 +51,15 @@ function RecipeForm() {
     <div>
       <form>
         <h2>Name of Cocktail</h2>
-        <input type='text' value={name} onChange={e => setName(e.target.value)}/>
+        <input class='addrecipe' type='text' value={name} onChange={e => setName(e.target.value)}/>
         <h2>Ingredients</h2>
         <p>Please make sure to separate each ingredient with a comma.</p>
-        <input type="text" value={ingredients} onChange={e => setIngredients(e.target.value)}/>
+        <input type="text" class='addrecipe' value={ingredients} onChange={e => setIngredients(e.target.value)}/>
         <h2>Instructions</h2>
-        <input type='text' value={name} onChange={e => setInstructions(e.target.value)}/>
+        <textarea class='recipeinstructions' type='text' value={instructions} onChange={e => setInstructions(e.target.value)}/>
+        <div>
         <input type='submit' value='Submit' onSubmit={handleSubmit} />
+        </div>
       </form>
     </div>
   )
