@@ -121,7 +121,7 @@ dbControllers.getRecipes = (req, res, next) => {
   const values = [req.params.id];
   db.query(queryStr, values)
     .then((data) => {
-      res.locals.faves = data.rows[0];
+      res.locals.recipes = data.rows;
       return next();
     })
     .catch((err) => {
