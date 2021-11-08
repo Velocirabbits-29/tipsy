@@ -58,7 +58,7 @@ dranks.handleSubmit = (req, res, next) => {
           } else {
             // if no drinks were found using their ingredients
             // assign a null object to res.locals for the front end to interpet
-            res.locals.drinks = {"drinks": null};
+            res.locals.drinks = {"suggestion": "We're sorry, no drinks using all of those ingredients were found. Try modifying your search."};
             // and continue the middleware chain
             next();
           }
