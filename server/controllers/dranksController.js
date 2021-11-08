@@ -10,6 +10,7 @@ const dranks = {};
 dranks.handleSubmit = (req, res, next) => {
   const ids = [];
   const queryMet = [];
+  const catCache = {};
   // query the API with the ingredients our user entered on the homepage.
   fetch(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/filter.php?i=${req.params.ingredients}`)
       .then(data => data.json())
@@ -30,17 +31,37 @@ dranks.handleSubmit = (req, res, next) => {
             if (data.drinks[0].strCategory === req.params.category) {
               // push that drink object into an array
               queryMet.push(data.drinks[0]);
-              // res.locals.drink = data.drinks[0];
-              // return next();
+              //  { res.locals.drink = data.drinks[0];
+              // return next(); } <-- & ^ code we might still need
+            } else {
+              // otherwise, store the category in a cache and log that category's appearance frequency
+              catCache[data/drinks[0].strCategory] ? catCache[data/drinks[0].strCategory] += 1 : catCache[data/drinks[0].strCategory] = 1;
             }
           })
         }
-        // if the query returned no results
+        // if the query returned no strict results
         if (queryMet.length === 0) {
-          // assign a null object to res.locals for the front end to interpet
-          res.locals.drinks = {"drinks": null};
-          // and continue the middleware chain
-          next();
+          // check the cache, were any drinks found using the user's ingredients at all?
+          const catKeys = Object.keys(catCache);
+          let max = 0;
+          let response;
+          for (key in catKeys) {
+            if (catCache[key] > max) {
+              max = catCache[key];
+              response = key;
+            }
+          }
+          // if so, suggest the user switch their mood to the most frequent category appearance returned by the ingredients query.
+          if (response) {
+            res.locals.drinks = {"suggestion": `Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling ${response} then we found some recipes for you!`};
+            return next();
+          } else {
+            // if no drinks were found using their ingredients
+            // assign a null object to res.locals for the front end to interpet
+            res.locals.drinks = {"drinks": null};
+            // and continue the middleware chain
+            next();
+          }
         } else {
           // if the query DID return results, assign them to res.locals
           res.locals.drinks = queryMet;
