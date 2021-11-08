@@ -142,8 +142,8 @@ dbControllers.addRecipe = (req, res, next) => {
   ];
   console.log(recipeValues);
   const queryStr = `
-  INSERT into recipes r (${recipeKeys})
-  VALUES ($1, $2, $3,  $4) 
+  INSERT into recipes (${recipeKeys})
+  VALUES ($1, $2, $3, $4) 
   RETURNING *
   `;
   db.query(queryStr, recipeValues)

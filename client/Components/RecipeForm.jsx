@@ -34,24 +34,24 @@ function RecipeForm(props) {
       pathname: '/mydrinks'
     })
 
-    // fetch(`/api/recipes/${id}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'Application/JSON'
-    //   },
-    //   body: JSON.stringify(body)
-    // })
-    //   .then(() => {
-    //     setName('');
-    //     setIngredients('');
-    //     setInstructions('');
-    //     history.push({
-    //       pathname: '/mydrinks'
-    //     })
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   })
+    fetch(`/api/recipes/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'Application/JSON'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(() => {
+        setName('');
+        setIngredients('');
+        setInstructions('');
+        history.push({
+          pathname: '/mydrinks'
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   return (
