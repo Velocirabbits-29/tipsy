@@ -13,7 +13,7 @@ dbControllers.getFaves = (req, res, next) => {
   const values = [req.params.id];
   db.query(queryStr, values)
     .then((data) => {
-      res.locals.faves = data.rows[0];
+      res.locals.faves = data.rows;
       return next();
     })
     .catch((err) => {
@@ -25,36 +25,12 @@ dbControllers.getFaves = (req, res, next) => {
 };
 
 //findCocktail middleware will be followed by addFave middleware
-dbControllers.findCocktail = (req, res, next) => {
-  const cocktailName = req.body.name;
-  const queryStrLocateCocktailId = `
-  SELECT cocktail_id from cocktail c
-  where c.name = ${cocktailName}`;
-  db.query(queryStrLocateCocktailId)
-    .then((data) => {
-      if (!data.rows[0]) {
-        return next();
-      } else {
-        res.locals.cocktailId = data.rows[0];
-        return next();
-      }
-    })
-    .catch((err) => {
-      return next({
-        message: err.message,
-        log: 'error in locating CocktailId middleware',
-      });
-    });
-};
-
-//addFave middleware follows the findCocktail middleware
-//at the moment ying hasn't been able to find a better way to insert into many-to-many relationship tables (in this case, users + faves + cocktails)
-//as you could see below, there's some nested query happening.. also kind of verbose...
+dbControllers.deleteFave = (req, res, next) => {};
 
 dbControllers.addFave = (req, res, next) => {
   if (res.locals.cocktailId) {
-    const favesKeys = ['user_id', 'cocktail_id'];
-    const favesValues = [req.params.id, res.locals.cocktailId];
+    const favesKeys = ['user_id', 'name'];
+    const favesValues = [req.params.id, req.body.name];
     const queryStrInsertFaves = `
     INSERT INTO faves f ${favesKeys} 
     VALUES($1, $2)
@@ -143,7 +119,7 @@ dbControllers.addRecipe = (req, res, next) => {
 
   const queryStr = `
   INSERT into recipes r (${recipeKeys})
-  VALUES ($1, $2, $3, Array $4) 
+  VALUES ($1, $2, $3, $4) 
   RETURNING *
   `;
   db.query(queryStr, recipeValues)

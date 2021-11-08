@@ -6,4 +6,8 @@ router.get('/:id', dbController.getRecipes, (req, res) =>
   res.status(200).json(res.locals.recipes)
 );
 
+router.post('/:id', dbController.addRecipe, (req, res) =>
+  res.status(200).json(res.locals.recipe)
+);
+
 module.exports = router;
