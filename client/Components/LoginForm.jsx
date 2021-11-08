@@ -4,17 +4,33 @@ import { Link } from 'react-router-dom';
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
   // login is a post request
-  const handleLogin = ((un, pw) => {
-    console.log(JSON.stringify({ username: un, password: pw }));
-
+  const handleLogin = ((username, password) => {
+    console.log(JSON.stringify({ username, password }));
+    
+    // fetch is built into the browser
     fetch('/login', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: un, password: pw })
-    }).then(() => {
-      console.log('logged in')
+      body: JSON.stringify({ username, password })
+    })
+    // .then(response => response.json())
+    .then((data) => {
+      // check response format... need conditional if user is authenticated
+
+      // if user is authenticated
+        console.log('logged in')
+        // set userId in local storage to persist through application
+        localStorage.setItem('userId', 'jennifer123');
+        setMessage('Success!');
+        // redirect user to home page
+        window.location.href='http://localhost:8080/';
+      
+      // if user is not authenticated
+        // setMessage('Invalid username/password. Please try again.');
+        // console.log('Invalid username/password');
     })
   })
 
@@ -26,7 +42,7 @@ function LoginForm() {
           <input
             id="login-username"
             type="text"
-            placeholder="login username placeholder..."
+            // placeholder="login username placeholder..."
             onChange={(event) => setUsername(event.target.value)}
           />
         </form>
@@ -35,7 +51,7 @@ function LoginForm() {
           <input
             id="login-password"
             type="text"
-            placeholder="login password placeholder..."
+            // placeholder="login password placeholder..."
             onChange={(event) => setPassword(event.target.value)}
           />
         </form>
@@ -45,10 +61,13 @@ function LoginForm() {
           type="submit"
           onClick={(event) => {
             event.preventDefault();
-            return handleLogin(username, password)
+            return handleLogin(username, password);
           }}>
           Log in
         </button>
+      </div>
+      <div>
+        <p>{message}</p>
       </div>
       <div>
         <p>Don't have an account?</p>
