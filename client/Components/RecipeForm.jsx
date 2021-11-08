@@ -19,15 +19,15 @@ function RecipeForm() {
   // fetch to handle submit
   const handleSubmit = () => {
     // const ingredientList = makeArray(ingredients);
-    const id = localStorage.getItem('userId');
+    const id = JSON.parse(localStorage.getItem('userId'));
 
     const body = {
       name,
-      ingredientList: ingredients,
+      ingredients,
       instructions
     }
 
-    fetch(`/addrecipe?id=${id}`, {
+    fetch(`/addrecipe/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/JSON'
@@ -40,7 +40,6 @@ function RecipeForm() {
         setInstructions('');
         <Redirect to={{
           pathname: "/mydrinks",
-          state: { id }
         }} />
       })
       .catch(err => {

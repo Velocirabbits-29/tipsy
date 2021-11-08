@@ -39,7 +39,7 @@ function SearchForm() {
     // after fetch request, returns an array holding recipe objs
     // loop through the array, finding the first obj that matches the mood
     // <Link> to Drink Page, passing in that obj ^ (drinkObj)
-    fetch(`url.com/dfdlsfksd/i=${}`, );
+    
   }
 
   return (
@@ -51,7 +51,7 @@ function SearchForm() {
           placeholder='Separate each ingredient with a comma...'  
         />
         <h1>I want to...</h1>
-        <select id="moodList" onChange={} value={mood}>
+        <select id="moodList" onChange={handleSubmit} value={mood}>
           { moods }
         </select>
         <input type='submit' value='Submit' onSubmit={handleSubmit} />

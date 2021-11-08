@@ -10,9 +10,7 @@ const userRecipes = [];
 // each key will hold an array holding all the favorites and recipes
 
 function MyDrinksPage(props) {
-  // ID passed in through Router Redirect
-  const { id } = props.location.state;
-  
+  // the above might not make it necessary to have the userId state below
   const [ userId, setUserId ] = useState('');
   const [ userFavs, setUserFavs ] = useState([]);
   const [ userRecipes, setUserRecipes ] = useState([]);
