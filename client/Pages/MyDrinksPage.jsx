@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MainContainer from '../Components/MainContainer.jsx';
 
 // will need to use localstorage to keep track of userID
@@ -21,16 +21,21 @@ function MyDrinksPage(props) {
   useEffect(() => {
     // getting user Id from local storage
     setUserId(JSON.parse(localStorage.getItem('userId')));
-
-    fetch('/placeholderforUserFavs')
+    console.log('DOES THIS HAPPEN, MAKING FETCH REQUESTS!')
+    // '/faves/:id'
+    // `/faves/${userId}`
+    // FAVORITES
+    fetch(`/faves/1`) // this is req.params
       .then(response => response.json())
       .then(data => {
         // need to see how userfavs data is formatted in response
         console.log('user favs from server', data);
         setUserFavs(data);
       })
-    
-    fetch('/placeholderforUserRecipes')
+
+    // '/recipes/:id'
+    // RECIPES
+    fetch('/recipes/1')
       .then(response => response.json())
       .then(data => {
         // need to see how userrecipes data is formatted in response
