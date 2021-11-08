@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MainContainer from '../Components/MainContainer.jsx';
 
 // will need to use localstorage to keep track of userID
@@ -10,6 +10,32 @@ const userRecipes = [];
 // each key will hold an array holding all the favorites and recipes
 
 function MyDrinksPage() {
+  const [ userId, setUserId ] = useState('');
+  const [ userFavs, setUserFavs ] = useState([]);
+  const [ userRecipes, setUserRecipes ] = useState([]);
+
+  // similar to ComponentDidMount
+  useEffect(() => {
+    // getting user Id from local storage
+    setUserId(JSON.parse(localStorage.getItem('userId')));
+
+    fetch('/placeholderforUserFavs')
+      .then(response => response.json())
+      .then(data => {
+        // need to see how userfavs data is formatted in response
+        console.log('user favs from server', data);
+        setUserFavs(data);
+      })
+    
+    fetch('/placeholderforUserRecipes')
+      .then(response => response.json())
+      .then(data => {
+        // need to see how userrecipes data is formatted in response
+        console.log('user recipes from server', data);
+        setUserRecipes(data);
+      })
+  }, []);
+
   return (
     <div>
       <MainContainer left='favorites' right='recipes' userFavs={userFavs} userRecipes={userRecipes} />
