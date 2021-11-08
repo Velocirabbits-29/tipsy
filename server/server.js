@@ -3,14 +3,20 @@ const app = express();
 const path = require('path');
 const PORT = 3000;
 const drinksRouter = require('./router');
+const faveRouter = require('./faveRouter');
+const recipeRouter = require('./recipeRouter');
 
 app.use(express.json());
-app.use(express.urlencoded({ extended : true }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/', drinksRouter);
+app.use('/faves', faveRouter);
+app.use('/recipes', recipeRouter);
 
 // catch-all route handler for any requests to an unknown route
-app.use('*', (req, res) => res.status(404).send('Go home Rebecca, you\'re drunk'));
+app.use('*', (req, res) =>
+  res.status(404).send("Go home Rebecca, you're drunk")
+);
 
 // production build static serve..ask about get request
 if (process.env.NODE_ENV === 'production') {

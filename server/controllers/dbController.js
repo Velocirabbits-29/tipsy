@@ -138,7 +138,7 @@ dbControllers.addRecipe = (req, res, next) => {
     req.params.user_id,
     req.body.name,
     req.body.instructions,
-    req.body.ingredientList,
+    req.body.ingredients,
   ];
 
   const queryStr = `
