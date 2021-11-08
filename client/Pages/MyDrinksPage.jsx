@@ -9,7 +9,10 @@ const userRecipes = [];
 // a note for the server: we will need to make sure we're sending back 1 object with two keys, 
 // each key will hold an array holding all the favorites and recipes
 
-function MyDrinksPage() {
+function MyDrinksPage(props) {
+  // ID passed in through Router Redirect
+  const { id } = props.location.state;
+  
   const [ userId, setUserId ] = useState('');
   const [ userFavs, setUserFavs ] = useState([]);
   const [ userRecipes, setUserRecipes ] = useState([]);
