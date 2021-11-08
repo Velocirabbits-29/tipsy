@@ -18,10 +18,12 @@ dranks.handleSubmit = (req, res, next) => {
       .then(async (data) => {
         // the api returns an array if any drinks are found
         // for every drink the query returns
-        for (drink of data.drinks) {
-          // grab the drink's id and push to an array
-          //ids.push(data.drinks[drink].idDrink);
-          ids.push(drink.idDrink);
+        if (data.drinks !== 'None Found') {
+          for (drink of data.drinks) {
+            // grab the drink's id and push to an array
+            //ids.push(data.drinks[drink].idDrink);
+            ids.push(drink.idDrink);
+          }
         }
         // once ids has been fully populated
         for (let i = 0; i < ids.length; i++) {
@@ -57,12 +59,12 @@ dranks.handleSubmit = (req, res, next) => {
           }
           // if so, suggest the user switch their mood to the most frequent category appearance returned by the ingredients query.
           if (response) {
-            res.locals.drinks = {"suggestion": `Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling ${response} then we found some recipes for you!`};
+            res.locals.drinks = {suggestion: `Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling ${response} then we found some recipes for you!`};
             return next();
           } else {
             // if no drinks were found using their ingredients
             // assign a null object to res.locals for the front end to interpet
-            res.locals.drinks = {"suggestion": "We're sorry, no drinks using all of those ingredients were found. Try modifying your search."};
+            res.locals.drinks = {suggestion: "We're sorry, no drinks using all of those ingredients were found. Try modifying your search."};
             // and continue the middleware chain
             next();
           }

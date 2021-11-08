@@ -49,13 +49,15 @@ function SearchForm(props) {
   // using the above moodList object. Set the result as our
   // "mood" state.
   const assignMood = (e) => {
+<<<<<<< HEAD
     console.log('assignMood invoked');
     console.log(e.target.value);
+=======
+>>>>>>> 3c7991944ad3fb20b32197bca53a0ba7f602c7fb
     setMood(moodList[e.target.value]);
   }
 
   const handleSubmit = () => {
-    console.log('handleSubmit invoked');
     // remove all spaces from the user's ingredients input
     const sendIngredients = ingredients.replace(' ', '');
     console.log('finalized ingredients query string', sendIngredients);
@@ -67,9 +69,9 @@ function SearchForm(props) {
     fetch(`/api/handleSubmit?ingredients=${sendIngredients}&category=${mood}`)
       .then(res => res.json())
       .then(data => {
-        // if (res.data.drinks.suggestion) message = res.data.drinks.suggestion;
+        if (data.suggestion) message = data.suggestion;
         drinkObj = data[0];
-        console.log('API\'s response', drinkObj || res.data.drinks.suggestion);
+        // console.log('API\'s response', drinkObj || message);
       })
       // then redirect to the /drink page, passing drinkObj (or message?) as a prop.
       .then(() => {
