@@ -15,7 +15,10 @@ module.exports = {
     },
     // re-routing api fetch calls to localhost 3000 (which has access to express)
     proxy: {
-      '/api': 'http://localhost:3000' // or use '/*' instead of '/api' to take care of all other fetch calls
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' }, // or use '/*' instead of '/api' to take care of all other fetch calls
+      }
      }
   },
   plugins: [
@@ -44,6 +47,14 @@ module.exports = {
           "css-loader",
           // Compiles Sass to CSS
           "sass-loader",
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
         ],
       },
     ],
