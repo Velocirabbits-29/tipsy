@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-const fetch = require('node-fetch');
+import React, { useEffect, useState } from 'react';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
 /*
 ***JSON DRINK OBJECT FORMAT***
@@ -10,10 +10,21 @@ obj.strMeasure[num] = corresponding measurement
 */
 
 function DrinkInfo({ drinkObj }) {
-  console.log(drinkObj);
+  const id = localStorage.getItem('userId');
+  const [fav, setFav] = useState(false);
+  // check if DrinkName is in favorites table
+  useEffect(() => {
+    fetch(`/api/faves/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        for (let elem of data) {
+          if (elem == drinkObj.strDrink) setFav(true);
+        }
+      })
+  }, []);
   const drinkName = drinkObj.strDrink;
   const instructions = drinkObj.strInstructions;
-  // Must combine strIngredient and strMeasure to populare ingredients array.
+  // Must combine strIngredient and strMeasure to popular ingredients array.
   // This is handled below in the while loop
   const ingredients = [];
   
@@ -46,7 +57,7 @@ function DrinkInfo({ drinkObj }) {
     const ingredient = drinkObj[key];
     if (ingredient === null) break;
     // the following line gets overwritten if there is no corresponding measurement
-    let measurement = ': '
+    let measurement = ':     ';
     // check if the current ingredient has a corresponding measurement
     // (drinkObj.strMeasure`${num}` !== null) ? measurement += drinkObj.strMeasure`${num}` : measurement = '';
     measurement += ingredientAndMeasureKeys[key];
@@ -54,10 +65,25 @@ function DrinkInfo({ drinkObj }) {
     ingredients.push(`${ingredient}${measurement}`)
   }
 
+  const handleClick = () => {
+    if (fav == true) {
+      // delete from favs table
+      //fetch();
+      setFav(false);
+    } else {
+      // add to favs table
+      //fetch();
+      setFav(true);
+    }
+  }
+
+  let heartIcon = (fav == true) ? <AiFillHeart onClick={handleClick} /> : <AiOutlineHeart onClick={handleClick} />;
+
   return (
     <div className="drink-info" >
       <h1 id="name">
-        {drinkName}
+        { drinkName }
+        { heartIcon }
       </h1>
       <ul id="measured-ingredients">
         {ingredients.map((entry, index) => {

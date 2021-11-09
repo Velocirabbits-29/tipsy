@@ -12,14 +12,14 @@ function MyDrinksPage(props) {
     // getting user Id from local storage
     const id = JSON.parse(localStorage.getItem('userId'));
     // setUserId(id);
-    fetch(`api/faves/${id}`) // this is req.params
+    fetch(`/api/faves/${id}`) // this is req.params
       .then(response => response.json())
       .then(data => {
         console.log('user favs from server', data);
         setUserFavs(data);
       })
 
-    fetch(`api/recipes/${id}`)
+    fetch(`/api/recipes/${id}`)
       .then(response => response.json())
       .then(data => {
         console.log('FETCH user recipes from server', data);
