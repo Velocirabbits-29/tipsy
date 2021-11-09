@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  connectionString: process.env.PG_URI,
+  connectionString: `postgres://oearvcte:yav5NGqFISpzRt6N4TYIiuSHSMzvPiFX@fanny.db.elephantsql.com/oearvcte`,
 });
 
 module.exports = {
