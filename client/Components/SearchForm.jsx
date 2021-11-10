@@ -80,8 +80,8 @@ function SearchForm() {
           //   }}
           //   />, document.getElementById('root')); 
           history.push({
-            pathname: '/drink',
-            state: {
+            'pathname': '/drink',
+            'state': {
               drinkObj
             }
           })
