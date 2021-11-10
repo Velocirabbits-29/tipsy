@@ -12,17 +12,16 @@ import SearchForm from '../client/Components/SearchForm';
 // import RecipeForm from '../client/Components/RecipeForm.jsx';
 // import Navigation from '../client/Components/Navigation.jsx';
 
-describe('SearchForm', () => {
+describe('Home', () => {
 
-  beforeAll(() => {
-  })
-  
-  it('loads component', () => {
+  it('loads SearchForm component', () => {
+    const component = render(<SearchForm />);
     screen.debug();
   });
   
   it('displays correct text', () => {
     const component = render(<SearchForm />);
     component.getByText('So what are we working with?');
+    
   })
 });
