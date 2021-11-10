@@ -25,6 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@react-mock/fetch": "^0.3.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "concurrently": "^6.3.0",
@@ -33,6 +34,7 @@
     "eslint": "^8.2.0",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
+    "jest-fetch-mock": "^3.0.3",
     "mongoose": "^6.0.0",
     "node-fetch": "^2.0.0",
     "nodemon": "^2.0.14",
@@ -60,6 +62,7 @@
     "install": "^0.13.0",
     "jest": "^27.3.1",
     "npm": "^8.1.2",
+    "react-mock": "^6.0.1",
     "sass": "^1.43.4",
     "sass-loader": "^12.3.0",
     "source-map-loader": "^3.0.0",
