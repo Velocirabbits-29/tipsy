@@ -71,7 +71,7 @@ dranks.handleSubmit = (req, res, next) => {
         } else {
           // if the query DID return results, assign them to res.locals
           res.locals.drinks = queryMet;
-          console.log(res.locals.drinks);
+          console.log('RES LOCALS: ', res.locals.drinks);
           // and continue the middleware chain
           next();
         }
