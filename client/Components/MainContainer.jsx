@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Photo from '../Assets/MainPhoto.jpeg';
 import styled from 'styled-components';
 import MyList from '../Components/MyList.jsx';
