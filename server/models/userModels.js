@@ -1,7 +1,9 @@
 const { Pool } = require('pg');
 
+const PG_URI = 'postgres://ikdvjxln:e4L33pn0X5g52n5ULGN2zkVmSHHoZ05l@rajje.db.elephantsql.com/ikdvjxln'
+
 const pool = new Pool({
-  connectionString: `postgres://oearvcte:yav5NGqFISpzRt6N4TYIiuSHSMzvPiFX@fanny.db.elephantsql.com/oearvcte`,
+  connectionString: PG_URI,
 });
 
 module.exports = {
@@ -11,3 +13,4 @@ module.exports = {
     return pool.query(text, params, callback);
   },
 };
+
