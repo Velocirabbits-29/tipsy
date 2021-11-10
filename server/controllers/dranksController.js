@@ -19,7 +19,7 @@ dranks.handleSubmit = (req, res, next) => {
         // the api returns an array if any drinks are found
         // for every drink the query returns
         if (data.drinks !== 'None Found') {
-          for (drink of data.drinks) {
+          for (const drink of data.drinks) {
             // grab the drink's id and push to an array
             //ids.push(data.drinks[drink].idDrink);
             ids.push(drink.idDrink);
@@ -51,7 +51,7 @@ dranks.handleSubmit = (req, res, next) => {
           const catKeys = Object.keys(catCache);
           let max = 0;
           let response;
-          for (key in catKeys) {
+          for (const key of catKeys) {
             if (catCache[key] > max) {
               max = catCache[key];
               response = key;
