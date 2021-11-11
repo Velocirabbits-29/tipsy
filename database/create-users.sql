@@ -1,12 +1,13 @@
 -- // psql -d postgres://ikdvjxln:e4L33pn0X5g52n5ULGN2zkVmSHHoZ05l@rajje.db.elephantsql.com/ikdvjxln -f create-users.sql
-DROP TABLE users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-   username VARCHAR NOT NULL UNIQUE,
+   username VARCHAR NOT NULL UNIQUE PRIMARY KEY,
    password VARCHAR NOT NULL,
    firstName VARCHAR NOT NULL,
    lastName VARCHAR NOT NULL,
    email VARCHAR NOT NULL
+
 );
 
 INSERT INTO users (username, password, firstName, lastName, email) VALUES ('dmflury','passwordOne','Dana','Flury','dmflury@gmail.com');
