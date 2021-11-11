@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
-const db = require('../../server/models/userModels')
-
 
 function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
   const id = localStorage.getItem('userId');
@@ -62,40 +60,13 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
     }
   }
 
-  const handleClick = async () => {
+  const handleClick = () => {
     if (fav == true) {
       // delete from favs table
-      const idDrink = drinkObj.iddrink;
-      const username = '';
-      let myQuery = 'DELETE FROM favorites WHERE'
-      myQuery += `idDrink=${idDrink} AND username=${username}`;
-      try {
-        let data = await db.query(myQuery);
-        console.log('SUCCESS DELETING FROM FAVS TABLE!')
-      } catch(err) {
-        console.log(err);
-      }
+      //fetch();
       setFav(false);
-
     } else {
-      // get unique Id for second db query with favid
-      try {
-        let maxId = await db.query('SELECT max(faveid) FROM favorites');
-        console.log('maxid', maxId);
-        maxId++;
-        console.log('maxid', maxId);
-      } catch (err) {
-        console.log(err);
-      }
-      // add to favorites table
-      let myQuery = 'INSERT INTO favorites (favid, iddrink, username)';
-      myQuery += ' VALUES (maxId, , )'
-      try {
-        let data = await db.query(myQuery);
-        console.log('SUCCESS ADDING TO FAVS TABLE!')
-      } catch (err) {
-        console.log(err);
-      }
+      // add to favs table
       //fetch();
       setFav(true);
     }
