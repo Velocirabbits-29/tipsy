@@ -2,19 +2,27 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 function MyList(props) {
-  const { userFavs, userRecipes, title } = props;
+  const { userFavs, userRecipes, title, currentUser, setCurrentUser } = props;
 
-  let ListItems, List;
+    let ListItems, List;
   List = title.includes('Recipes') ? userRecipes : userFavs;
 
   if (List !== undefined && Array.isArray(List)) {
     ListItems = List.map((element, index) => {
-      return <li>{element.name}</li>
+      // return <li>{element.strdrink}</li>
+      const drinkObj = element;
+      return <li>
+        <Link to={{
+          pathname: '/drink',
+          state: {
+            drinkObj
+          }
+        }}>{element.strdrink}</Link>
+      </li>
     })
   } else if (!Array.isArray(List)) {
     ListItems = <li>{List.name}</li>;
   }
-
 
     // if want to get fancy and create hyperlinks to each favorite drink info / each user recipe drink info
     // <li>

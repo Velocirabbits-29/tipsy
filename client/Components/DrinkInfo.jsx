@@ -3,7 +3,7 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 const db = require('../../server/models/userModels')
 
 
-function DrinkInfo({ drinkObj }) {
+function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
   const id = localStorage.getItem('userId');
   const [fav, setFav] = useState(false);
   // check if DrinkName is in favorites table

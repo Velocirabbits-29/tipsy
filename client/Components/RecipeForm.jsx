@@ -57,7 +57,7 @@ function RecipeForm(props) {
   // fetch to handle submit
   const handleSubmit = () => {
     const parsedIngredients = parseIngredients(ingredients);
-    // const creator = currentUser.username;
+    const creator = props.currentUser.username;
 
     const body = {
       name,
