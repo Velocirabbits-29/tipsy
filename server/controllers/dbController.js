@@ -32,6 +32,43 @@ dbControllers.getFaves = (req, res, next) => {
     });
 };
 
+dbControllers.addFav = async (req, res, next) => {
+  // add to favorites table
+  const username = req.params.user;
+  const idDrink = req.params.drink;
+  console.log('[drink, user]', [idDrink, username]);
+  try {
+    let result = await db.query('SELECT max(faveid) FROM favorites')
+    console.log('result', result)
+    let maxId = result.rows[0].max;
+    console.log('maxid', maxId);
+    maxId++;
+    console.log('maxid', maxId);
+    let myQuery = 'INSERT INTO favorites (faveid, iddrink, username)';
+    myQuery += ` VALUES ('${maxId}', '${idDrink}', '${username}')`
+    let data = await db.query(myQuery);
+    console.log('SUCCESS ADDING TO FAVS TABLE!')
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
+
+dbControllers.deleteFav = async (req, res, next) => {
+  const username = req.params.user;
+  const idDrink = req.params.drink;
+  console.log('[drink, user]', [idDrink, username]);
+  let myQuery = 'DELETE FROM favorites WHERE'
+  myQuery += ` idDrink='${idDrink}' AND username='${username}'`;
+  try {
+    let data = await db.query(myQuery);
+    console.log('SUCCESS DELETING FROM FAVS TABLE!')
+  } catch(err) {
+    console.log(err);
+  }
+}
+
 //findCocktail middleware will be followed by addFave middleware
 dbControllers.findCocktail = (req, res, next) => {
   const cocktailName = req.body.name;
@@ -59,66 +96,66 @@ dbControllers.findCocktail = (req, res, next) => {
 //at the moment ying hasn't been able to find a better way to insert into many-to-many relationship tables (in this case, users + faves + cocktails)
 //as you could see below, there's some nested query happening.. also kind of verbose...
 
-dbControllers.addFave = (req, res, next) => {
-  if (res.locals.cocktailId) {
-    const favesKeys = ['user_id', 'cocktail_id'];
-    const favesValues = [req.params.id, res.locals.cocktailId];
-    const queryStrInsertFaves = `
-    INSERT INTO faves f ${favesKeys} 
-    VALUES($1, $2)
-    RETURNING *
-    `;
-    db.query(queryStrInsertFaves, favesValues)
-      .then((data) => {
-        res.locals.fave = data.rows[0];
-        return next();
-      })
-      .catch((err) => {
-        return next({
-          message: err.message,
-          log: 'error in addToFaves table part (the cocktail name already exists in the cocktails table)',
-        });
-      });
-  }
+// dbControllers.addFave = (req, res, next) => {
+//   if (res.locals.cocktailId) {
+//     const favesKeys = ['user_id', 'cocktail_id'];
+//     const favesValues = [req.params.id, res.locals.cocktailId];
+//     const queryStrInsertFaves = `
+//     INSERT INTO faves f ${favesKeys} 
+//     VALUES($1, $2)
+//     RETURNING *
+//     `;
+//     db.query(queryStrInsertFaves, favesValues)
+//       .then((data) => {
+//         res.locals.fave = data.rows[0];
+//         return next();
+//       })
+//       .catch((err) => {
+//         return next({
+//           message: err.message,
+//           log: 'error in addToFaves table part (the cocktail name already exists in the cocktails table)',
+//         });
+//       });
+//   }
 
-  const cocktailKeys = ['name'];
-  const cocktailValues = req.body.name;
-  const queryStrInsertCocktail = `
-  INSERT into cocktails c ${cocktailKeys} VALUES($1)
-  `;
-  const queryStrInsertFaves = `
-  INSERT INTO faves f ${favesKeys} 
-  VALUES($1, $2)
-  RETURNING *`;
+//   const cocktailKeys = ['name'];
+//   const cocktailValues = req.body.name;
+//   const queryStrInsertCocktail = `
+//   INSERT into cocktails c ${cocktailKeys} VALUES($1)
+//   `;
+//   const queryStrInsertFaves = `
+//   INSERT INTO faves f ${favesKeys} 
+//   VALUES($1, $2)
+//   RETURNING *`;
 
-  db.query(queryStrInsertCocktail, cocktailValues)
-    .then((data) => {
-      res.locals.cocktailId = data.rows[0]['cocktail_id'];
-    })
-    .then(() => {
-      const favesKeys = ['user_id', 'cocktail_id'];
-      const favesValues = [req.params.id, res.locals.cocktailId];
+//   db.query(queryStrInsertCocktail, cocktailValues)
+//     .then((data) => {
+//       res.locals.cocktailId = data.rows[0]['cocktail_id'];
+//     })
+//     .then(() => {
+//       const favesKeys = ['user_id', 'cocktail_id'];
+//       const favesValues = [req.params.id, res.locals.cocktailId];
 
-      db.query(
-        queryStrInsertFaves,
-        favesValues
-      )((data) => {
-        res.locals.fave = data.rows[0];
-        return next();
-      }).catch((err) => {
-        return next({
-          message: err.message,
-          log: 'error in addToFaves table part (the cocktail name does not already exist in the cocktails table and it was being added)',
-        });
-      });
-    })
-    .catch((err) => {
-      return next({
-        message: err.message,
-        log: 'error in addRecipe middleware',
-      });
-    });
-};
+//       db.query(
+//         queryStrInsertFaves,
+//         favesValues
+//       )((data) => {
+//         res.locals.fave = data.rows[0];
+//         return next();
+//       }).catch((err) => {
+//         return next({
+//           message: err.message,
+//           log: 'error in addToFaves table part (the cocktail name does not already exist in the cocktails table and it was being added)',
+//         });
+//       });
+//     })
+//     .catch((err) => {
+//       return next({
+//         message: err.message,
+//         log: 'error in addRecipe middleware',
+//       });
+//     });
+// };
 
 dbControllers.getRecipes = (req, res, next) => {
   const queryStr = `SELECT name, instructions, ingredient_list FROM recipes r
