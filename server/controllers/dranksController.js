@@ -248,7 +248,7 @@ dranks.getByIngredients = (req, res, next) => {
 dranks.getByName = (req, res, next) => {
   // will reurn all drinks with the search query in the name
   // i.e. searching 'margarita' returns all cocktails with the word margarita in them
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${req.params.name}`)
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${req.query.name}`)
       .then(data => data.json())
       .then(data => {
         res.locals.drinks = data;
