@@ -52,7 +52,7 @@ function MainContainer(props) {
       Left = <Image src={Photo} />
       break;
     case 'drinkImage':
-      Left = <Image src={drinkObj.strDrinkThumb} /> // do i need to use 'require'?
+      Left = <Image src={drinkObj.strdrinkthumb} /> 
       break;
     case 'favorites':
       Left = <MyList title='My Favorite Drinks' userFavs={userFavs}/>

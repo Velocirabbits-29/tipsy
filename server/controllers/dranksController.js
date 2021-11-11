@@ -10,61 +10,103 @@ const dranks = {};
 
 dranks.handleSubmit = async (req, res, next) => {
   console.log('handleSubmit reached in server');
-  const ids = [];
-  const drinkNames = [];
+  const matchedIds = [];
+  const matchedDrinkNames = [];
+  const matchedDrinks = [];
   const queryMet = [];
   const catCache = {};
-  console.log(userInput)
   // query the database with the ingredients our user entered on the homepage.
   let myQuery = 'SELECT iddrink, strdrink, strCategory, strdrinkthumb, strinstructions, strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5, strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10, strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15, strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5, strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10, strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15'
   myQuery += ' FROM cocktails'
-  // myQuery += ' WHERE strIngredient1=$1 OR strIngredient2=$1 OR strIngredient3=$1 OR strIngredient4=$1 OR strIngredient5=$1 OR strIngredient6=$1 OR strIngredient7=$1 OR strIngredient8=$1 OR strIngredient9=$1 OR strIngredient10=$1 OR strIngredient11=$1 OR strIngredient12=$1 OR strIngredient13=$1 OR strIngredient14=$1 OR strIngredient15=$1'
   myQuery += ' WHERE (UPPER(strIngredient1)=UPPER($1) OR UPPER(strIngredient2)=UPPER($1) OR UPPER(strIngredient3)=UPPER($1) OR UPPER(strIngredient4)=UPPER($1) OR UPPER(strIngredient5)=UPPER($1) OR UPPER(strIngredient6)=UPPER($1) OR UPPER(strIngredient7)=UPPER($1) OR UPPER(strIngredient8)=UPPER($1) OR UPPER(strIngredient9)=UPPER($1) OR UPPER(strIngredient10)=UPPER($1) OR UPPER(strIngredient11)=UPPER($1) OR UPPER(strIngredient12)=UPPER($1) OR UPPER(strIngredient13)=UPPER($1) OR UPPER(strIngredient14)=UPPER($1) OR UPPER(strIngredient15)=UPPER($1))'
   myQuery += ' AND (UPPER(strCategory)=UPPER($2))'
 
-  const userInput = [req.query.ingredients, null]
-  const categories = ["Ordinary Drink", "Cocktail", "Punch / Party Drink", "Shot"]
+  let userInput = [req.query.ingredients, req.query.category]
+  console.log(userInput)
 
-  // make one db query for each of the 4 categories/moods
-  for (let i = 0; i < categories.length; i++) {
-    try {
-      console.log('ENTERED QUERY');
-      userInput[1] = categories[i];
+  // make one db query matching user input
+  try {
+    console.log('ENTERED QUERY');
 
-      let data = await db.query(myQuery, userInput);
-      console.log('DATA: ', data.rows);
-      // if corresponds to user inputted category/mood, fill in ids Array with drinks
-      if (userInput[1] === req.query.categories) {
-        for (let i = 0; i < data.rows.length; i++) {
-          ids.push(data.rows[i].iddrink);
-          drinkNames.push(data.rows[i].strdrink);
-        }
-      } else {
-        // if not the user category, store the category in a cache and log that category's appearance frequency
-        catCache[userInput[1]] ? catCache[userInput[1]] += 1 : catCache[userInput[1]] = 1;
+    let data = await db.query(myQuery, userInput);
+    // console.log('DATA: ', data.rows);
+    // if corresponds to user inputted category/mood, fill in matchedIds Array with drinks
+    for (let i = 0; i < data.rows.length; i++) {
+      matchedIds.push(data.rows[i].iddrink);
+      matchedDrinkNames.push(data.rows[i].strdrink);
+      matchedDrinks.push(data.rows[i]);
+    }
+    // once matchedIds has been fully populated
+    console.log(matchedDrinkNames);
+
+  } catch (err) {
+    return next({
+      log: 'Express error handler caught error in handleSubmit, prob with db query',
+      status: 500,
+      message: { err: `${err}` }
+    });
+  }
+
+  if (matchedIds.length !== 0) {
+    // generate random drink from matchedDrinks and move to next middleware
+    res.locals.drinks = matchedDrinks[Math.floor(Math.random() * matchedDrinks.length)];
+    console.log('Selected drink: ', res.locals.drinks);
+    return next();
+
+  } else {
+    // find count of all cocktails that match the users ingredients in each of the 3 other categories/moods
+    // check the cache, were any drinks found using the user's ingredients at all?
+    const categories = ["Ordinary Drink", "Cocktail", "Punch / Party Drink", "Shot"]
+    const otherCategories = categories.splice(categories.indexOf(req.query.category), 1);
+    for (let i = 0; i < otherCategories.length; i++) {
+      userInput[1] = otherCategories[i];
+  
+      myQuery = 'SELECT COUNT(iddrink)'
+      myQuery += ' FROM cocktails'
+      myQuery += ' WHERE (UPPER(strIngredient1)=UPPER($1) OR UPPER(strIngredient2)=UPPER($1) OR UPPER(strIngredient3)=UPPER($1) OR UPPER(strIngredient4)=UPPER($1) OR UPPER(strIngredient5)=UPPER($1) OR UPPER(strIngredient6)=UPPER($1) OR UPPER(strIngredient7)=UPPER($1) OR UPPER(strIngredient8)=UPPER($1) OR UPPER(strIngredient9)=UPPER($1) OR UPPER(strIngredient10)=UPPER($1) OR UPPER(strIngredient11)=UPPER($1) OR UPPER(strIngredient12)=UPPER($1) OR UPPER(strIngredient13)=UPPER($1) OR UPPER(strIngredient14)=UPPER($1) OR UPPER(strIngredient15)=UPPER($1))'
+      myQuery += ' AND (UPPER(strCategory)=UPPER($2))'
+  
+      try {
+        console.log('ENTERED QUERY');
+        let data = await db.query(myQuery, userInput);
+        console.log('DATA: ', data.rows);
+        // store the category in a cache and log that category's appearance frequency
+        catCache[userInput[1]] = data.rows;
+      } catch (err) {
+        return next(err);
       }
-      // once ids has been fully populated
-      console.log(drinkNames);
+    }
+    console.log('Reached out of query for loop')
 
-      // find count of all cocktails that match the users ingredients in each of the 3 other categories/moods
-      // check the cache, were any drinks found using the user's ingredients at all?
-      const otherCategories = categories.splice(categories.indexOf(req.query.category), 1);
-
-    } catch (err) {
-      return next(err);
+    // Find which of the 3 other categories have the most drinks with user ingredients
+    const catKeys = Object.keys(catCache);
+    let max = 0;
+    let response;
+    for (key in catKeys) {
+      if (catCache[key] > max) {
+        max = catCache[key];
+        response = key;
+      }
+    }
+    // suggest the user switch their mood to the most frequent category appearance returned by the ingredients query.
+    if (response) {
+      res.locals.drinks = {suggestion: `Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling ${response} then we found some recipes for you!`};
+      return next();
+    } else {
+      // if no drinks were found using their ingredients
+      // assign a null object to res.locals for the front end to interpet
+      res.locals.drinks = {suggestion: "We're sorry, no drinks using all of those ingredients were found. Try modifying your search."};
+      // and continue the middleware chain
+      return next();
     }
   }
+ 
 
-  console.log('Reached out of query for loop')
-  const catKeys = Object.keys(catCache);
-  let max = 0;
-  let response;
-  for (key in catKeys) {
-    if (catCache[key] > max) {
-      max = catCache[key];
-      response = key;
-    }
-  }
+
+
+
+  // if no cocktails match user inputted ingredients and cateogries
+
   // fetch(`https://www.thecocktaildb.com/api/json/v2/${apiKey}/filter.php?i=${req.query.ingredients}`)
   //     .then(data => data.json())
   //     .then(async (data) => {
@@ -73,14 +115,14 @@ dranks.handleSubmit = async (req, res, next) => {
   //       if (data.drinks !== 'None Found') {
   //         for (drink of data.drinks) {
   //           // grab the drink's id and push to an array
-  //           //ids.push(data.drinks[drink].idDrink);
-  //           ids.push(drink.idDrink);
+  //           //matchedIds.push(data.drinks[drink].idDrink);
+  //           matchedIds.push(drink.idDrink);
   //         }
   //       }
-  //       // once ids has been fully populated
-  //       for (let i = 0; i < ids.length; i++) {
+  //       // once matchedIds has been fully populated
+  //       for (let i = 0; i < matchedIds.length; i++) {
   //         // check the api entry of each drink returned by the ingredients query
-  //         await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${ids[i]}`)
+  //         await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${matchedIds[i]}`)
   //         .then(data => data.json())
   //         .then(data => {
   //           // if the current drink's category matches the category corresponding to the user's input mood

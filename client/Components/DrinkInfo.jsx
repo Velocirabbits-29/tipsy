@@ -22,29 +22,29 @@ function DrinkInfo({ drinkObj }) {
         }
       })
   }, []);
-  const drinkName = drinkObj.strDrink;
-  const instructions = drinkObj.strInstructions;
+  const drinkName = drinkObj.strdrink;
+  const instructions = drinkObj.strinstructions;
   // Must combine strIngredient and strMeasure to popular ingredients array.
   // This is handled below in the while loop
   const ingredients = [];
   
   // ingredient key array
   let ingredientAndMeasureKeys = {
-    strIngredient1: drinkObj.strMeasure1,
-    strIngredient2: drinkObj.strMeasure2,
-    strIngredient3: drinkObj.strMeasure3,
-    strIngredient4: drinkObj.strMeasure4,
-    strIngredient5: drinkObj.strMeasure5,
-    strIngredient6: drinkObj.strMeasure6,
-    strIngredient7: drinkObj.strMeasure7,
-    strIngredient8: drinkObj.strMeasure8,
-    strIngredient9: drinkObj.strMeasure9,
-    strIngredient10: drinkObj.strMeasure10,
-    strIngredient11: drinkObj.strMeasure11,
-    strIngredient12: drinkObj.strMeasure12,
-    strIngredient13: drinkObj.strMeasure13,
-    strIngredient14: drinkObj.strMeasure14,
-    strIngredient15: drinkObj.strMeasure15,
+    stringredient1: drinkObj.strmeasure1,
+    stringredient2: drinkObj.strmeasure2,
+    stringredient3: drinkObj.strmeasure3,
+    stringredient4: drinkObj.strmeasure4,
+    stringredient5: drinkObj.strmeasure5,
+    stringredient6: drinkObj.strmeasure6,
+    stringredient7: drinkObj.strmeasure7,
+    stringredient8: drinkObj.strmeasure8,
+    stringredient9: drinkObj.strmeasure9,
+    stringredient10: drinkObj.strmeasure10,
+    stringredient11: drinkObj.strmeasure11,
+    stringredient12: drinkObj.strmeasure12,
+    stringredient13: drinkObj.strmeasure13,
+    stringredient14: drinkObj.strmeasure14,
+    stringredient15: drinkObj.strmeasure15,
   };
 
   // create a numerical variable of the current strIngredient
