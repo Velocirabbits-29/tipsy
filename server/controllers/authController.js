@@ -31,14 +31,22 @@ authController.createUser = (req, res, next) => {
 but async or promise chaining is not working _______*/
 authController.verifyUser = (req, res, next) => {
   const { username, password } = req.body;
-  const queryStr = 'SELECT username, password FROM users WHERE username = $1';
+  const queryStr = 'SELECT * FROM users WHERE username = $1';
   const values = [username];
   db.query(queryStr, values)
     .then(data => {
-      console.log(data.rows);
-      return next();
+      const user = data.rows[0]
+      bcrypt.compare(password, user.password, (err, result) => {
+        res.locals.userVerified = result;
+        console.log('Bcrypt result: ', res.locals.userVerified);
+        if (err) console.log(err);
+        if (res.locals.userVerified) {
+          res.locals.user = user;
+          console.log('User data: ', res.locals.user);
+        }
+        return next();
+      });
     })
-
   // try {
   //   const { username, password } = req.body;
   //   const hash = bcrypt.hash(password, 10);
