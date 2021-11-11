@@ -26,6 +26,7 @@ module.exports = {
     template: './index.html',
   })
   ],
+  
   module: {
     rules: [
       { 
@@ -59,6 +60,7 @@ module.exports = {
       },
     ],
   },
+  
 }
 
 

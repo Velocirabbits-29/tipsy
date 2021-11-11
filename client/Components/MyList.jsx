@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 
 function MyList(props) {
   const { userFavs, userRecipes, title, currentUser, setCurrentUser } = props;
-
+  console.log('My list props: ', props)
     let ListItems, List;
   List = title.includes('Recipes') ? userRecipes : userFavs;
-
   if (List !== undefined && Array.isArray(List)) {
     ListItems = List.map((element, index) => {
       // return <li>{element.strdrink}</li>
@@ -15,7 +14,9 @@ function MyList(props) {
         <Link to={{
           pathname: '/drink',
           state: {
-            drinkObj
+            drinkObj,
+            currentUser,
+            // setCurrentUser
           }
         }}>{element.strdrink}</Link>
       </li>

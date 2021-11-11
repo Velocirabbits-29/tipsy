@@ -32,6 +32,43 @@ dbControllers.getFaves = (req, res, next) => {
     });
 };
 
+dbControllers.addFav = async (req, res, next) => {
+  // add to favorites table
+  const username = req.params.user;
+  const idDrink = req.params.drink;
+  console.log('[drink, user]', [idDrink, username]);
+  try {
+    let result = await db.query('SELECT max(faveid) FROM favorites')
+    console.log('result', result)
+    let maxId = result.rows[0].max;
+    console.log('maxid', maxId);
+    maxId++;
+    console.log('maxid', maxId);
+    let myQuery = 'INSERT INTO favorites (faveid, iddrink, username)';
+    myQuery += ` VALUES ('${maxId}', '${idDrink}', '${username}')`
+    let data = await db.query(myQuery);
+    console.log('SUCCESS ADDING TO FAVS TABLE!')
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
+
+dbControllers.deleteFav = async (req, res, next) => {
+  const username = req.params.user;
+  const idDrink = req.params.drink;
+  console.log('[drink, user]', [idDrink, username]);
+  let myQuery = 'DELETE FROM favorites WHERE'
+  myQuery += ` idDrink='${idDrink}' AND username='${username}'`;
+  try {
+    let data = await db.query(myQuery);
+    console.log('SUCCESS DELETING FROM FAVS TABLE!')
+  } catch(err) {
+    console.log(err);
+  }
+}
+
 //findCocktail middleware will be followed by addFave middleware
 dbControllers.findCocktail = (req, res, next) => {
   const cocktailName = req.req.body.name;
