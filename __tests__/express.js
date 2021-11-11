@@ -43,7 +43,7 @@ describe('Route integration', () => {
           .expect(200)
           .then(data => {
             const res = JSON.parse(data.text)
-            expect(res[0].strDrink).toBe('Army special')
+            expect(res.strdrink).toBeTruthy()
           });
       });
 
@@ -58,7 +58,7 @@ describe('Route integration', () => {
           .expect(200)
           .then(data => {
             const res = JSON.parse(data.text)
-            expect(res.suggestion).toBe('Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling Cocktail then we found some recipes for you!')
+            expect(res.suggestion).toBe('Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling Fancy then we found some recipes for you!')
           });
       });
 
@@ -111,19 +111,36 @@ describe('Route integration', () => {
     });
 
 
+    describe('placeholderforByName', () => {
+      describe('GET', () => {
+        it('responds with 200 code and json object containing the specified drink string', () => {
+          return request(server)
+          .get('/placeholderforByName?name=Tequila Fizz')
+          .expect('Content-Type', /application\/json/)
+          .expect(200)
+          .then(data => {
+            const res = JSON.parse(data.text)
+            expect(res.drinks[0].strDrink).toBe('Tequila Fizz')
+          });
+        })
+      })
+    });
 
 
-
+// describe('placeholderforCategory', () => {
+//   describe('GET', () => {
+//     it('responds with 200 code and json object containing the specified drink category', () => {
+//       return request(server)
+//       .get('/placeholderforCategory')
+//       .expect('Content-Type', /application\/json/)
+//       .expect(200)
+//       .then(data => {
+//         const res = JSON.parse(data.text)
+//         expect(res.drinks[0].strDrink).toBe('Ordinary Drink')
+//       });
+//     })
+//   })
+// });
   });
-
-
-
-
-
-
-
-
-
-
 });
 
