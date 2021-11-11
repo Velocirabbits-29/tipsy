@@ -67,7 +67,7 @@ function MainContainer(props) {
       Right = <SearchForm />
       break;
     case 'drinkInfo':
-      Right = <DrinkInfo drinkObj={drinkObj}/>
+      Right = <DrinkInfo drinkObj={drinkObj} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
       break;
     case 'recipes':
       Right = <MyList title='My Favorite Recipes' userRecipes={userRecipes} currentUser={currentUser} setCurrentUser={setCurrentUser} />

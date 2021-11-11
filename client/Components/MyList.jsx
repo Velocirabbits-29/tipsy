@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function MyList(props) {
   const { userFavs, userRecipes, title, currentUser, setCurrentUser } = props;
 
-  let ListItems, List;
+    let ListItems, List;
   List = title.includes('Recipes') ? userRecipes : userFavs;
 
   if (List !== undefined && Array.isArray(List)) {
@@ -23,7 +23,6 @@ function MyList(props) {
   } else if (!Array.isArray(List)) {
     ListItems = <li>{List.name}</li>;
   }
-
 
     // if want to get fancy and create hyperlinks to each favorite drink info / each user recipe drink info
     // <li>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
-function DrinkInfo({ drinkObj }) {
+function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
   const id = localStorage.getItem('userId');
   const [fav, setFav] = useState(false);
   // check if DrinkName is in favorites table
