@@ -8,7 +8,7 @@ function DrinkPage(props) {
 
   return (
     <div>
-      <MainContainer left='drinkImage' drinkObj={drinkObj} right='drinkInfo' />
+      <MainContainer left='drinkImage' drinkObj={drinkObj} right='drinkInfo' currentUser={props.currentUser} setCurrentUser={props.setCurrentUser} userVerified={props.userVerified} setUserVerified={props.setUserVerified}/>
     </div>
   )
 }
