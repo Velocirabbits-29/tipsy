@@ -3,20 +3,28 @@ const db = require('../models/userModels');
 const dbControllers = {};
 
 dbControllers.getFaves = (req, res, next) => {
-  const queryStr = `SELECT name FROM cocktails c 
-  INNER JOIN faves f 
-  ON f.cocktail_id = c.cocktail_id
-  INNER JOIN users u 
-  ON u.user_id = f.user_id
-  WHERE u.user_id = $1`;
 
-  const values = [req.params.id];
+  const username = res.locals.user.username
+  const values = [username];
+  const queryStr =
+    `SELECT c.*
+    FROM users u
+    INNER JOIN
+    favorites f
+    ON u.username = f.username
+    INNER JOIN
+    cocktails c
+    ON f.iddrink = c.iddrink
+    WHERE u.username = $1`;
+
   db.query(queryStr, values)
-    .then((data) => {
-      res.locals.faves = data.rows[0];
+    .then(data => {
+      // console.log(data.rows[0])
+      res.locals.user.faves = data.rows
+      // console.log(`${username} has following favorite drinks `, data.rows)
       return next();
     })
-    .catch((err) => {
+    .catch(err => {
       return next({
         message: err.message,
         log: 'error in getFaves middleware',
