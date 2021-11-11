@@ -9,22 +9,23 @@ function MyDrinksPage({ currentUser, setCurrentUser } = props) {
   const [ userRecipes, setUserRecipes ] = useState([]);
 
   useEffect(() => {
-    // fetch(`/api/faves/${id}`) // this is req.params
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log('user favs from server', data);
-    //     setUserFavs(data);
-    //   })
-
-    // fetch(`/api/recipes/${id}`)
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log('FETCH user recipes from server', data);
-    //     setUserRecipes(data);
-    //   })
     setUserFavs(currentUser.faves);
   }, []);
-  console.log('RETURN')
+  
+  // useEffect(() => {
+  //   fetch('/api/getuserinfo', {
+  //     method: 'POST',
+  //     headers: { "Content-Type": "application/json"},
+  //     body: JSON.stringify(currentUser.username)
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     const { faves } = data;
+  //     setUserFavs(faves);
+  //   })
+  // }, [currentUser])
+
+  // console.log('RETURN')
   return (
     <div>
       <MainContainer left='favorites' right='recipes' userFavs={userFavs} userRecipes={userRecipes} currentUser={currentUser} setCurrentUser={setCurrentUser} />
@@ -33,3 +34,14 @@ function MyDrinksPage({ currentUser, setCurrentUser } = props) {
 }
 
 export default MyDrinksPage;
+
+    // fetch('/api/getuserinfo', {
+    //   method: 'POST',
+    //   headers: { "Content-Type": "application/json"},
+    //   body: JSON.stringify(currentUser.username)
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //   const { faves } = data;
+    //   setUserFavs(faves);
+    // })

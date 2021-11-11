@@ -3,6 +3,17 @@ const bcrypt = require("bcryptjs");
 
 const authController = {};
 
+authController.getuserinfo = (req, res, next) => {
+  const value = [req.body];
+  const queryStr = 'SELECT * FROM users WHERE username = $1';
+  db.query(queryStr, values)
+    .then(data => {
+      res.locals.user = data.rows[0]
+      console.log(res.locals.user)
+      return next();
+    })
+}
+
 /*_______THIS WAS NOT FULLY IMPLEMENTED, for some reason second query request isn't working.. Good luck!_______*/
 authController.createUser = (req, res, next) => {
   const { username, password, firstName, lastName, email } = req.body;

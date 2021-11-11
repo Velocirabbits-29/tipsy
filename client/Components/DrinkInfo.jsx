@@ -76,7 +76,7 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser } = props) {
       // delete from favs table
       console.log('drinkObj line 66', drinkObj)
       const myDrink = drinkObj.iddrink;
-      const user = 'sarkamedo';
+      const user = currentUser.username;
 
       fetch(`/api/faves/deleteFav/${user}/${myDrink}/`)
         .then( response => console.log(response)) 
@@ -90,7 +90,7 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser } = props) {
       console.log('drinkObj line 79', drinkObj)
       const myDrink = drinkObj.iddrink;
       console.log('myDrink', myDrink)
-      const user = 'sarkamedo';
+      const user = currentUser.username;
       fetch(`/api/faves/addFav/${user}/${String(myDrink)}/`)
         .then( response => console.log(response))
         .catch (err => {

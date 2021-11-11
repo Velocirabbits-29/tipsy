@@ -22,6 +22,10 @@ router.post('/login', authController.verifyUser, dbControllers.getFaves, (req, r
   return res.status(200).json(responseObj);
 });
 
+router.post('/getuserinfo', authController.getuserinfo, (req, res) => {
+  res.status(200).send(res.locals.user);
+})
+
 // router for main user submit function
 router.get('/handleSubmit', dranksController.handleSubmit, (req, res) =>
   res.status(200).send(res.locals.drinks)
