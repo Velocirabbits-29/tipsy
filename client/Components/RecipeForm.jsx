@@ -3,6 +3,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import  { useHistory } from 'react-router-dom';
 
+const StyledRecipeForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10vw;
+  padding-right: 10vw;
+`
+
 function RecipeForm(props) {
   let history = useHistory();
   const [ name, setName ] = useState('');
@@ -10,12 +18,6 @@ function RecipeForm(props) {
   const [ instructions, setInstructions ] = useState('');
   const [ mood, setMood ] = useState('');
 
-const StyledSearchForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 30px;
-`
   // function that converts string to array
   const parseIngredients = (string) => {
     let array = string.split(',');
@@ -57,42 +59,50 @@ const StyledSearchForm = styled.div`
     const parsedIngredients = parseIngredients(ingredients);
     // const creator = currentUser.username;
 
-    console.log(id);
-
     const body = {
       name,
       parsedIngredients,
       instructions,
       mood
     }
+    console.log(body);
 
-    history.push({
-      pathname: '/mydrinks'
-    })
-
-    fetch(`/api/recipes/${id}`, {
+    fetch('/api/addRecipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/JSON'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(body);
     })
-      .then(() => {
-        setName('');
-        setIngredients('');
-        setInstructions('');
-        history.push({
-          pathname: '/mydrinks'
-        })
-      })
-      .catch(err => {
-        console.log(err);
-      })
+      .then(res => res.json())
+      .then(data => console.log(data))
+    // history.push({
+    //   pathname: '/mydrinks'
+    // })
+
+    // fetch(`/api/recipes/${id}`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'Application/JSON'
+    //   },
+    //   body: JSON.stringify(body)
+    // })
+    //   .then(() => {
+    //     setName('');
+    //     setIngredients('');
+    //     setInstructions('');
+    //     history.push({
+    //       pathname: '/mydrinks'
+    //     })
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   })
   }
 
   return (
     <div>
-      <StyledSearchForm>
+      <StyledRecipeForm>
         <h2>Name of Cocktail</h2>
         <input placeholder='(E.g., Boulevardier)' type='text' value={name} onChange={e => setName(e.target.value)}/>
         <h2>Ingredients</h2>
@@ -107,7 +117,7 @@ const StyledSearchForm = styled.div`
         <div>
         <input type='submit' value='Submit' onClick={handleSubmit} />
         </div>
-      </StyledSearchForm>
+      </StyledRecipeForm>
     </div>
   )
 }
