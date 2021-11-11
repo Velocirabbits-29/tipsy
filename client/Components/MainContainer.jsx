@@ -64,7 +64,7 @@ function MainContainer(props) {
   let Right;
   switch (right) {
     case 'homepage':
-      Right = <SearchForm />
+      Right = <SearchForm currentUser={currentUser} setCurrentUser={setCurrentUser}/>
       break;
     case 'drinkInfo':
       Right = <DrinkInfo drinkObj={drinkObj} currentUser={currentUser} setCurrentUser={setCurrentUser}/>

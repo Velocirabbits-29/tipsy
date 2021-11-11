@@ -27,7 +27,7 @@ function MyDrinksPage({ currentUser, setCurrentUser } = props) {
   console.log('RETURN')
   return (
     <div>
-      <MainContainer left='favorites' right='recipes' userFavs={userFavs} userRecipes={userRecipes} />
+      <MainContainer left='favorites' right='recipes' userFavs={userFavs} userRecipes={userRecipes} currentUser={currentUser} setCurrentUser={setCurrentUser} />
     </div>
   )
 }
