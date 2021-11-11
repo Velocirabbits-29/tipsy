@@ -18,9 +18,7 @@ const Router = () => {
           <Route exact path="/">
             <App currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} />
           </Route>
-          <Route path="/drink">
-            <DrinkPage currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} />
-          </Route>
+          <Route path="/drink" component={DrinkPage} />
           <Route path="/addrecipe">
             <RecipePage currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} />
           </Route>
