@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 
-function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
+function DrinkInfo({ drinkObj, currentUser, setCurrentUser } = props) {
   const id = localStorage.getItem('userId');
   const [fav, setFav] = useState(false);
   // check if DrinkName is in favorites table
@@ -14,13 +14,24 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
   //       }
   //     })
   // }, []);
+
+  console.log('currentUser: ', currentUser);
+
+  useEffect(() => {
+    if (currentUser && Object.keys(currentUser).length !== 0) {
+      currentUser.faves.forEach((fav) => {
+        fav.iddrink === drinkObj.iddrink ? setFav(true) : null;
+      });
+    }
+  }, []);
+
   console.log('DRINKOBJ: ', drinkObj);
   const drinkName = drinkObj.strdrink;
   const instructions = drinkObj.strinstructions;
   // Must combine strIngredient and strMeasure to popular ingredients array.
   // This is handled below in the while loop
   const ingredients = [];
-  
+
   // ingredient key array
   let ingredientAndMeasureKeys = {
     stringredient1: drinkObj.strmeasure1,
@@ -40,7 +51,7 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
     stringredient15: drinkObj.strmeasure15,
   };
 
-  // if there were no matching drinks in database, just show the suggestion 
+  // if there were no matching drinks in database, just show the suggestion
   if (drinkObj.suggestion) {
     ingredients.push(drinkObj.suggestion);
   } else {
@@ -56,7 +67,7 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
       // (drinkObj.strMeasure`${num}` !== null) ? measurement += drinkObj.strMeasure`${num}` : measurement = '';
       measurement += ingredientAndMeasureKeys[key];
       // push the completed string into the ingredients array
-      ingredients.push(`${ingredient}${measurement}`)
+      ingredients.push(`${ingredient}${measurement}`);
     }
   }
 
@@ -70,26 +81,33 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser} = props) {
       //fetch();
       setFav(true);
     }
-  }
+  };
 
-  let heartIcon = (fav == true) ? <AiFillHeart onClick={handleClick} /> : <AiOutlineHeart onClick={handleClick} />;
+  let heartIcon =
+    fav == true ? (
+      <AiFillHeart onClick={handleClick} />
+    ) : (
+      <AiOutlineHeart onClick={handleClick} />
+    );
 
   return (
-    <div className="drink-info" >
+    <div className="drink-info">
       <h1 id="name">
-        { drinkName }
-        { heartIcon }
+        {drinkName}
+        {heartIcon}
       </h1>
       <ul id="measured-ingredients">
         {ingredients.map((entry, index) => {
-          return <li id="ingredient-bullet" key={index}>{entry}</li>
+          return (
+            <li id="ingredient-bullet" key={index}>
+              {entry}
+            </li>
+          );
         })}
       </ul>
-      <p id="instructions">
-        {instructions}
-      </p>
+      <p id="instructions">{instructions}</p>
     </div>
-  )
+  );
 }
 
-export default DrinkInfo
+export default DrinkInfo;

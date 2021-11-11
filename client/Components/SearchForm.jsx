@@ -10,7 +10,7 @@ const StyledSearchForm = styled.div`
   justify-content: center;
 `
 
-function SearchForm() {
+function SearchForm({ currentUser } = props) {
   let history = useHistory();
   const [ ingredients, setIngredients ] = useState('');
   const [ mood, setMood ] = useState('');
@@ -80,7 +80,8 @@ function SearchForm() {
           history.push({
             'pathname': '/drink',
             'state': {
-              drinkObj
+              drinkObj,
+              currentUser
             }
           })
         } else {

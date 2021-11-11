@@ -11,6 +11,10 @@ const Router = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [userVerified, setUserVerified] = useState(false);
 
+  function withProps(Component, props) {
+
+  }
+
   return (
     <div>
       <BrowserRouter>
@@ -18,6 +22,7 @@ const Router = () => {
           <Route exact path="/">
             <App currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} />
           </Route>
+          {/* <Route path="/drink" element={<DrinkPage currentUser={currentUser} setCurrentUser={setCurrentUser} />} /> */}
           <Route path="/drink" component={DrinkPage} />
           <Route path="/addrecipe">
             <RecipePage currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} />
