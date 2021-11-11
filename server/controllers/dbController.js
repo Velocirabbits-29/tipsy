@@ -141,16 +141,53 @@ dbControllers.getRecipes = (req, res, next) => {
 };
 
 dbControllers.addRecipe = (req, res, next) => {
-  const { name, parsedIngredients, instructions, mood, } = req.body;
 
+  // sample req body object
+  const body = {
+    "name": "Boulevardier",
+    "parsedIngredients": {
+      "ingredients": [
+        "Bourbon",
+        "Campari",
+        "Sweet Vermouth"
+      ],
+      "measurements": [
+        "1 1/4 oz",
+        "1 oz",
+        "1 oz"
+      ]
+    },
+    "instructions": "Add together and drank",
+    "mood": "Cocktail",
+    "creator": "rfh"
+  }
 
+  // destructure body // 17840
+  
 
+  // get last id in the db
+
+  const queryStr = 'SELECT MAX(iddrink) FROM cocktails;';
+
+  let newDrinkID;
+  db.query(queryStr)
+    .then(data => {
+      newDrinkID = data.rows[0].max + 1;
+
+      return next()
+    })
+    .catch(err => {
+      return next({
+        message: err.message,
+        log: 'error in getRecipes middleware',
+      });
+    });
 
 
   // const recipeKeys = ['user_id', 'name', 'instructions', 'ingredient_list'];
-  // const recipeValues = [
-  //   req.params.id,
-  //   req.body.name,
+  // const recipeValues = [      
+  //   req.params.id,    
+  //   req.body.name,  
   //   req.body.instructions,
   //   req.body.ingredients,
   // ];
@@ -168,7 +205,7 @@ dbControllers.addRecipe = (req, res, next) => {
   //   .catch((err) => {
   //     return next({
   //       message: err.message,
-  //       log: 'error in addRecipe middleware',
+  //       log: 'error in addRecipe middleware',   
   //     });
   //   });
 };
