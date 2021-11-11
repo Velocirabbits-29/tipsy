@@ -58,10 +58,13 @@ function RecipeForm(props) {
     <div>
       <form>
         <h2>Name of Cocktail</h2>
-        <input className='addrecipe' type='text' value={name} onChange={e => setName(e.target.value)}/>
+        <input className='addrecipe' placeholder='(E.g., Boulevardier)' type='text' value={name} onChange={e => setName(e.target.value)}/>
         <h2>Ingredients</h2>
-        <p>Please make sure to separate each ingredient with a comma.</p>
+        <p>Please separate ingredients by comma and indicate portions .</p>
         <input type="text" className='addrecipe' value={ingredients} onChange={e => setIngredients(e.target.value)}/>
+        <h2>Instructions</h2>
+        <textarea className='recipeinstructions' type='text' value={instructions} onChange={e => setInstructions(e.target.value)}/>
+        <div>
         <h2>Instructions</h2>
         <textarea className='recipeinstructions' type='text' value={instructions} onChange={e => setInstructions(e.target.value)}/>
         <div>
