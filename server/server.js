@@ -9,9 +9,9 @@ const recipeRouter = require('./recipeRouter');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', drinksRouter);
 app.use('/faves', faveRouter);
 app.use('/recipes', recipeRouter);
+app.use('/', drinksRouter);
 
 
 // catch-all route handler for any requests to an unknown route
