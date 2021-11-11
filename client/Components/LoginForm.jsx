@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-function LoginForm() {
+function LoginForm({ currentUser, setCurrentUser, userVerified, setUserVerified } = props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
   // login is a post request
   const handleLogin = ((username, password) => {
-    console.log(JSON.stringify({ username, password }));
     
     // fetch is built into the browser
     fetch('/api/login', {
@@ -20,11 +19,19 @@ function LoginForm() {
     .then((data) => {
       // check response format... need conditional if user is authenticated
       console.log('Response data: ', data)
+      const { user, userVerified } = data;
+      if (userVerified) {
+        setCurrentUser(user);
+        setUserVerified(true);
+        // setMessage(`Success! Welcome, ${user.firstname}`);
+      } else {
+        // setMessage('Invalid username/password. Please try again.')
+      }
+
       // if user is authenticated
         // console.log('logged in')
         // set userId in local storage to persist through application
         // localStorage.setItem('userId', 1);
-        setMessage('Success!');
         // redirect user to home page
         // window.location.href='http://localhost:8080/';
       // if user is not authenticated

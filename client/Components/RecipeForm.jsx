@@ -63,16 +63,17 @@ function RecipeForm(props) {
       name,
       parsedIngredients,
       instructions,
-      mood
+      mood,
+      creator
     }
     console.log(body);
 
-    fetch('/api/addRecipe', {
+    fetch('/api/recipes/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'Application/JSON'
       },
-      body: JSON.stringify(body);
+      body: JSON.stringify(body)
     })
       .then(res => res.json())
       .then(data => console.log(data))

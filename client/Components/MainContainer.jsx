@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Photo from '../Assets/MainPhoto.jpeg';
 import styled from 'styled-components';
 import MyList from '../Components/MyList.jsx';
@@ -10,6 +10,7 @@ import RecipeForm from './RecipeForm.jsx';
 import Navigation from './Navigation.jsx';
 
 function MainContainer(props) {
+
   const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
@@ -21,7 +22,7 @@ function MainContainer(props) {
     margin: 0 80px;
   `;
 
-  const { left, right, drinkObj, userFavs, userRecipes } = props;
+  const { left, right, drinkObj, userFavs, userRecipes, currentUser, setCurrentUser, userVerified, setUserVerified } = props;
 
   const Image = styled.img`
     border-radius: 300px 300px 0 0;
@@ -74,7 +75,7 @@ function MainContainer(props) {
       Right = <SignupForm />
       break;
     case 'login':
-      Right = <LoginForm />
+      Right = <LoginForm currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} />
       break;
     case 'addRecipe':
       Right = <RecipeForm />
@@ -85,14 +86,14 @@ function MainContainer(props) {
   return (
     <>
       <Navigation />
-      <Wrapper id='main-container'>
+      <Wrapper id='main-container' currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified}>
         {/* Left Side */}
         <LeftContainer>
           { Left }
         </LeftContainer>
 
         {/* Right Side */}
-        <RightContainer>
+        <RightContainer currentUser={currentUser} setCurrentUser={setCurrentUser} userVerified={userVerified} setUserVerified={setUserVerified} >
           { Right }
         </RightContainer>
       </Wrapper>
