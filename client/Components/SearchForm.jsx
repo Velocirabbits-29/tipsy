@@ -66,8 +66,10 @@ function SearchForm() {
     fetch(`/api/handleSubmit?ingredients=${sendIngredients}&category=${mood}`)
       .then(res => res.json())
       .then(data => {
+        console.log('REACHED LINE 69 of SEARCH FORM')
         console.log(data);
         if (data.suggestion) message = data.suggestion;
+        console.log('Message: ', message);
         drinkObj = data;
         // console.log('API\'s response', drinkObj || message);
       })
@@ -75,12 +77,6 @@ function SearchForm() {
       .then(() => {
         if (drinkObj) {
           console.log('drinkObj:', drinkObj);
-          // ReactDOM.render(<Redirect
-          //   to={{
-          //     pathname: "/drink",
-          //     state: { drinkObj }
-          //   }}
-          //   />, document.getElementById('root')); 
           history.push({
             'pathname': '/drink',
             'state': {

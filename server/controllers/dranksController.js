@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
 const apiKey = 9973533;
-const db = require('../models/tipsyModels');
+const db = require('../models/userModels');
 
 const dranks = {};
 
@@ -17,19 +17,24 @@ dranks.handleSubmit = async (req, res, next) => {
   const catCache = {};
   // query the database with the ingredients our user entered on the homepage.
   let myQuery = 'SELECT iddrink, strdrink, strCategory, strdrinkthumb, strinstructions, strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5, strIngredient6, strIngredient7, strIngredient8, strIngredient9, strIngredient10, strIngredient11, strIngredient12, strIngredient13, strIngredient14, strIngredient15, strMeasure1, strMeasure2, strMeasure3, strMeasure4, strMeasure5, strMeasure6, strMeasure7, strMeasure8, strMeasure9, strMeasure10, strMeasure11, strMeasure12, strMeasure13, strMeasure14, strMeasure15'
-  myQuery += ' FROM cocktails'
-  myQuery += ' WHERE (UPPER(strIngredient1)=UPPER($1) OR UPPER(strIngredient2)=UPPER($1) OR UPPER(strIngredient3)=UPPER($1) OR UPPER(strIngredient4)=UPPER($1) OR UPPER(strIngredient5)=UPPER($1) OR UPPER(strIngredient6)=UPPER($1) OR UPPER(strIngredient7)=UPPER($1) OR UPPER(strIngredient8)=UPPER($1) OR UPPER(strIngredient9)=UPPER($1) OR UPPER(strIngredient10)=UPPER($1) OR UPPER(strIngredient11)=UPPER($1) OR UPPER(strIngredient12)=UPPER($1) OR UPPER(strIngredient13)=UPPER($1) OR UPPER(strIngredient14)=UPPER($1) OR UPPER(strIngredient15)=UPPER($1))'
-  myQuery += ' AND (UPPER(strCategory)=UPPER($2))'
+  myQuery += ' FROM cocktails WHERE'
+  // add WHERE clause to SQL query for each comma-separated ingredient that the user inputted
+  const userIngredients = req.query.ingredients.split(',');
+  for (let i = 0; i < userIngredients.length; i++) {
+    myQuery += ` (UPPER(strIngredient1)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient2)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient3)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient4)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient5)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient6)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient7)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient8)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient9)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient10)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient11)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient12)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient13)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient14)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient15)=UPPER('${userIngredients[i]}'))`
+    if (i !== userIngredients.length - 1) {
+      myQuery += ' AND'
+    }
+  }
+  // add WHERE clause to match user inputted mood
+  myQuery += ` AND (UPPER(strCategory)=UPPER('${req.query.category}'))`
+  // console.log('myQuery', myQuery);
 
-  let userInput = [req.query.ingredients, req.query.category]
-  console.log(userInput)
-
-  // make one db query matching user input
+  // make one single db query matching user inputted ingredients and mood
   try {
-    console.log('ENTERED QUERY');
+    console.log('ENTERED 1st QUERY');
 
-    let data = await db.query(myQuery, userInput);
-    // console.log('DATA: ', data.rows);
+    let data = await db.query(myQuery);
     // if corresponds to user inputted category/mood, fill in matchedIds Array with drinks
     for (let i = 0; i < data.rows.length; i++) {
       matchedIds.push(data.rows[i].iddrink);
@@ -55,37 +60,47 @@ dranks.handleSubmit = async (req, res, next) => {
 
   } else {
     // find count of all cocktails that match the users ingredients in each of the 3 other categories/moods
-    // check the cache, were any drinks found using the user's ingredients at all?
-    const categories = ["Ordinary Drink", "Cocktail", "Punch / Party Drink", "Shot"]
-    const otherCategories = categories.splice(categories.indexOf(req.query.category), 1);
+    const otherCategories = ["Ordinary Drink", "Cocktail", "Punch / Party Drink", "Shot"]
+    otherCategories.splice(otherCategories.indexOf(req.query.category), 1);
+    console.log(otherCategories);
     for (let i = 0; i < otherCategories.length; i++) {
-      userInput[1] = otherCategories[i];
-  
+      console.log(`Runing ${i}th query`)
       myQuery = 'SELECT COUNT(iddrink)'
-      myQuery += ' FROM cocktails'
-      myQuery += ' WHERE (UPPER(strIngredient1)=UPPER($1) OR UPPER(strIngredient2)=UPPER($1) OR UPPER(strIngredient3)=UPPER($1) OR UPPER(strIngredient4)=UPPER($1) OR UPPER(strIngredient5)=UPPER($1) OR UPPER(strIngredient6)=UPPER($1) OR UPPER(strIngredient7)=UPPER($1) OR UPPER(strIngredient8)=UPPER($1) OR UPPER(strIngredient9)=UPPER($1) OR UPPER(strIngredient10)=UPPER($1) OR UPPER(strIngredient11)=UPPER($1) OR UPPER(strIngredient12)=UPPER($1) OR UPPER(strIngredient13)=UPPER($1) OR UPPER(strIngredient14)=UPPER($1) OR UPPER(strIngredient15)=UPPER($1))'
-      myQuery += ' AND (UPPER(strCategory)=UPPER($2))'
+      myQuery += ' FROM cocktails WHERE'
+      for (let i = 0; i < userIngredients.length; i++) {
+        myQuery += ` (UPPER(strIngredient1)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient2)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient3)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient4)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient5)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient6)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient7)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient8)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient9)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient10)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient11)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient12)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient13)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient14)=UPPER('${userIngredients[i]}') OR UPPER(strIngredient15)=UPPER('${userIngredients[i]}'))`
+        if (i !== userIngredients.length - 1) {
+          myQuery += ' AND'
+        }
+      }
+      myQuery += ` AND (UPPER(strCategory)=UPPER('${otherCategories[i]}'))`
   
       try {
         console.log('ENTERED QUERY');
-        let data = await db.query(myQuery, userInput);
+        let data = await db.query(myQuery);
         console.log('DATA: ', data.rows);
         // store the category in a cache and log that category's appearance frequency
-        catCache[userInput[1]] = data.rows;
+        catCache[otherCategories[i]] = data.rows[0].count;
       } catch (err) {
         return next(err);
       }
     }
-    console.log('Reached out of query for loop')
+    console.log('Done with SQL queries')
+    console.log('catCache:', catCache) 
 
     // Find which of the 3 other categories have the most drinks with user ingredients
-    const catKeys = Object.keys(catCache);
     let max = 0;
     let response;
-    for (key in catKeys) {
-      if (catCache[key] > max) {
+    const categories = {
+      "Ordinary Drink" : 'Basic',
+      "Cocktail" : 'Fancy',
+      "Punch / Party Drink" : 'Party Hardy',
+      "Shot": 'Experimental'
+    }
+    for (key in catCache) {
+      if (Number(catCache[key]) > max) {
         max = catCache[key];
-        response = key;
+        response = categories[key];
       }
     }
     // suggest the user switch their mood to the most frequent category appearance returned by the ingredients query.
@@ -93,6 +108,7 @@ dranks.handleSubmit = async (req, res, next) => {
       res.locals.drinks = {suggestion: `Sorry, no drinks with those ingredients fit your mood.\n But if you were feeling ${response} then we found some recipes for you!`};
       return next();
     } else {
+      console.log('NO DRINKS FOUND USING INGREDIENTS')
       // if no drinks were found using their ingredients
       // assign a null object to res.locals for the front end to interpet
       res.locals.drinks = {suggestion: "We're sorry, no drinks using all of those ingredients were found. Try modifying your search."};

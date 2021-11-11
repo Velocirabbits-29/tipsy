@@ -1,4 +1,4 @@
-const db = require ('../models/tipsyModels');
+const db = require ('../models/userModels');
 const bcrypt = require ('bcryptjs');
 
 const authController = {};
