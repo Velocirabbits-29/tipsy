@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function LoginForm({ currentUser, setCurrentUser, userVerified, setUserVerified } = props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  const history = useHistory();
   // login is a post request
   const handleLogin = ((username, password) => {
     
@@ -23,6 +24,9 @@ function LoginForm({ currentUser, setCurrentUser, userVerified, setUserVerified 
       if (userVerified) {
         setCurrentUser(user);
         setUserVerified(true);
+          history.push({
+            'pathname': '/',
+          })
         // setMessage(`Success! Welcome, ${user.firstname}`);
       } else {
         // setMessage('Invalid username/password. Please try again.')
