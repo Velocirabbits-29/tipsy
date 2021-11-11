@@ -1,8 +1,8 @@
 const express = require('express');
 
 const dranksController = require('./controllers/dranksController');
-
 const authController = require('./controllers/authController');
+const dbControllers = require('./controllers/dbController');
 
 const router = express.Router();
 
@@ -13,15 +13,13 @@ router.post('/signup', authController.createUser, (req, res) =>
   res.status(200).send('Signup endpoint fired')
 );
 
-router.post('/login', authController.verifyUser, (req, res) => {
+router.post('/login', authController.verifyUser, dbControllers.getFaves, (req, res) => {
   console.log('login router fired')
   let responseObj;
   if (res.locals.userVerified) {
     responseObj = {user: res.locals.user, userVerified: res.locals.userVerified};
   } else responseObj = {user: null, userVerified: res.locals.userVerified};
-  res
-    .status(200)
-    .json(responseObj);
+  return res.status(200).json(responseObj);
 });
 
 // router for main user submit function
