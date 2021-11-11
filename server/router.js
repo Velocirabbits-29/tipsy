@@ -15,7 +15,10 @@ router.post('/signup', authController.createUser, (req, res) =>
 
 router.post('/login', authController.verifyUser, (req, res) => {
   console.log('login router fired')
-  const responseObj = {user: res.locals.user, userVerified: res.locals.userVerified};
+  let responseObj;
+  if (res.locals.userVerified) {
+    responseObj = {user: res.locals.user, userVerified: res.locals.userVerified};
+  } else responseObj = {user: null, userVerified: res.locals.userVerified};
   res
     .status(200)
     .json(responseObj);
