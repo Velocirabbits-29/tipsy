@@ -74,10 +74,28 @@ function DrinkInfo({ drinkObj, currentUser, setCurrentUser } = props) {
   const handleClick = () => {
     if (fav == true) {
       // delete from favs table
-      //fetch();
+      console.log('drinkObj line 66', drinkObj)
+      const myDrink = drinkObj.iddrink;
+      const user = 'sarkamedo';
+
+      fetch(`/api/faves/deleteFav/${user}/${myDrink}/`)
+        .then( response => console.log(response)) 
+        .catch (err => {
+          console.log(err)
+        })
+
       setFav(false);
     } else {
       // add to favs table
+      console.log('drinkObj line 79', drinkObj)
+      const myDrink = drinkObj.iddrink;
+      console.log('myDrink', myDrink)
+      const user = 'sarkamedo';
+      fetch(`/api/faves/addFav/${user}/${String(myDrink)}/`)
+        .then( response => console.log(response))
+        .catch (err => {
+          console.log(err)
+        })
       //fetch();
       setFav(true);
     }
