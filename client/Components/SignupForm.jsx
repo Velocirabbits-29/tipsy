@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function SignupForm() {
   const [ firstName, setFirstName ] = useState('');
@@ -7,6 +7,8 @@ function SignupForm() {
   const [ email, setEmail ] = useState('');
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
+
+  const history = useHistory();
 
   const handleSignUp = (fn, ln, em, un, pw) => {
     console.log(JSON.stringify({ firstName: fn, lastName: ln, email: em, username: un, password: pw }));
@@ -17,6 +19,9 @@ function SignupForm() {
       // username, password, firstName, lastName, email
     }).then(() => {
       console.log('signed in')
+          history.push({
+            'pathname': '/login',
+          })
       // get userId back, and create localStorage item
     })
   }
